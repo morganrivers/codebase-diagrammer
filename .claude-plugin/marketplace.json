@@ -1,0 +1,15 @@
+{
+  "name": "codebase-diagrammer",
+  "owner": {
+    "name": "morganrivers",
+    "url": "https://github.com/morganrivers"
+  },
+  "plugins": [
+    {
+      "name": "codebase-diagrammer",
+      "source": "./",
+      "description": "Generate editable draw.io architecture and data-flow diagrams of a codebase, laid out with Graphviz and rendered to SVG/PNG.",
+      "version": "0.1.0"
+    }
+  ]
+}

@@ -1,0 +1,543 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1903" height="3178" viewBox="1 -70 1903 3178" font-family="Helvetica,Arial,sans-serif">
+<rect x="1" y="-70" width="1903" height="3178" fill="#ffffff"/>
+<rect x="400.0" y="2841.0" width="180.0" height="24.0" rx="10" ry="10" fill="#6b7f96" stroke="none" stroke-width="1" opacity="0.9"/>
+<text x="490.0" y="2857.2" font-size="12.0" fill="#ffffff" text-anchor="middle" font-weight="700">INPUT · app + upload</text>
+<rect x="1030.0" y="2082.0" width="315.0" height="24.0" rx="10" ry="10" fill="#5a9367" stroke="none" stroke-width="1" opacity="0.9"/>
+<text x="1187.5" y="2098.2" font-size="12.0" fill="#ffffff" text-anchor="middle" font-weight="700">EXTRACT · Gemini pipeline (per PDF)</text>
+<rect x="748.0" y="1762.0" width="207.0" height="24.0" rx="10" ry="10" fill="#8493a4" stroke="none" stroke-width="1" opacity="0.9"/>
+<text x="851.5" y="1778.2" font-size="12.0" fill="#ffffff" text-anchor="middle" font-weight="700">projects/{activity_id}/</text>
+<rect x="621.0" y="1171.0" width="297.0" height="24.0" rx="10" ry="10" fill="#8a5fb0" stroke="none" stroke-width="1" opacity="0.9"/>
+<text x="769.5" y="1187.2" font-size="12.0" fill="#ffffff" text-anchor="middle" font-weight="700">PREDICT · Random Forest + explain</text>
+<rect x="904.0" y="274.0" width="216.0" height="24.0" rx="10" ry="10" fill="#c17a3a" stroke="none" stroke-width="1" opacity="0.9"/>
+<text x="1012.0" y="290.2" font-size="12.0" fill="#ffffff" text-anchor="middle" font-weight="700">NARRATIVE · RAG forecast</text>
+<rect x="864.0" y="-40.0" width="180.0" height="24.0" rx="10" ry="10" fill="#4f9b95" stroke="none" stroke-width="1" opacity="0.9"/>
+<text x="954.0" y="-23.8" font-size="12.0" fill="#ffffff" text-anchor="middle" font-weight="700">UI · Streamlit pages</text>
+<path d="M769.7,3008.0 L771.0,2994.0 L773.0,2974.0 L775.8,2948.0" fill="none" stroke="#8493a4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="775.8,2948.0 778.8,2957.4 770.9,2956.5" fill="#8493a4"/>
+<path d="M700.0,3029.6 L563.0,3003.0 L255.0,2946.0 L255.0,2946.0 L255.0,2946.0 L244.0,2943.0 L218.0,2936.1" fill="none" stroke="#8493a4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="218.0,2936.1 227.7,2934.5 225.7,2942.3" fill="#8493a4"/>
+<text x="255.0" y="2946.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">startup</text>
+<path d="M129.5,3008.0 L130.0,2991.0 L130.0,2968.0 L130.8,2940.0" fill="none" stroke="#3d72b4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="130.8,2940.0 134.5,2949.1 126.5,2948.9" fill="#3d72b4"/>
+<path d="M1717.0,3005.0 L1717.0,2986.0 L1717.0,2960.0 L1726.3,2931.0" fill="none" stroke="#9aa6b3" stroke-width="1.4"/>
+<polygon points="1726.3,2931.0 1727.3,2940.8 1719.7,2938.4" fill="#9aa6b3"/>
+<path d="M305.6,3023.0 L276.0,3004.0 L221.0,2969.0 L174.7,2940.0" fill="none" stroke="#8493a4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="174.7,2940.0 184.4,2941.4 180.2,2948.2" fill="#8493a4"/>
+<path d="M131.7,2886.0 L132.0,2837.0 L132.0,2726.0 L132.0,2726.0 L132.0,2726.0 L132.0,2726.0 L132.0,1707.0 L132.0,1707.0 L371.0,1571.0 L484.8,1506.0" fill="none" stroke="#3d72b4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="484.8,1506.0 478.9,1513.9 475.0,1507.0" fill="#3d72b4"/>
+<text x="132.0" y="2726.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">ensemble + baseline</text>
+<path d="M818.7,2879.0 L854.0,2848.0 L912.0,2799.0 L957.4,2759.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="957.4,2759.0 953.3,2768.0 948.0,2762.0" fill="#2e8b57"/>
+<text x="883.0" y="2823.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">PDF</text>
+<path d="M996.9,2690.0 L997.0,2677.0 L998.0,2658.0 L997.8,2633.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="997.8,2633.0 1001.8,2642.0 993.8,2642.0" fill="#2e8b57"/>
+<text x="997.5" y="2667.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">calls in order</text>
+<path d="M997.8,2579.0 L998.0,2566.0 L998.0,2548.0 L998.0,2522.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="998.0,2522.0 1002.0,2531.0 994.0,2531.0" fill="#2e8b57"/>
+<path d="M1042.8,2468.0 L1066.0,2454.0 L1101.0,2433.0 L1137.1,2411.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="1137.1,2411.0 1131.5,2419.1 1127.4,2412.3" fill="#2e8b57"/>
+<path d="M1211.5,2357.0 L1226.0,2344.0 L1249.0,2324.0 L1275.1,2300.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="1275.1,2300.0 1271.1,2309.0 1265.7,2303.2" fill="#2e8b57"/>
+<path d="M1332.1,2231.0 L1340.0,2217.0 L1351.0,2199.0 L1364.7,2174.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="1364.7,2174.0 1363.9,2183.8 1356.9,2180.0" fill="#2e8b57"/>
+<path d="M1066.3,2579.0 L1209.0,2523.0 L1565.0,2385.0 L1565.0,2385.0 L1565.0,2385.0 L1565.0,2385.0 L1565.0,2146.0 L1565.0,2146.0 L1532.0,2122.0 L1532.0,2122.0 L1532.0,2122.0 L1426.0,2052.0 L1349.6,2001.0" fill="none" stroke="#b98a1e" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1349.6,2001.0 1359.3,2002.7 1354.9,2009.3" fill="#b98a1e"/>
+<text x="1565.0" y="2265.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">metadata.json</text>
+<path d="M997.7,2468.0 L997.0,2411.0 L995.0,2267.0 L995.0,2267.0 L995.0,2267.0 L995.0,2267.0 L995.0,2146.0 L995.0,2146.0 L1139.0,2059.0 L1232.8,2001.0" fill="none" stroke="#b98a1e" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1232.8,2001.0 1227.3,2009.1 1223.1,2002.3" fill="#b98a1e"/>
+<text x="995.0" y="2267.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">page_categories.jsonl</text>
+<path d="M1174.8,2357.0 L1169.0,2334.0 L1160.0,2298.0 L1160.0,2298.0 L1160.0,2298.0 L1160.0,2233.0 L1160.0,2233.0 L1160.0,2233.0 L1245.0,2060.0 L1245.0,2060.0 L1245.0,2060.0 L1258.0,2034.0 L1274.6,2001.0" fill="none" stroke="#b98a1e" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1274.6,2001.0 1274.1,2010.8 1267.0,2007.2" fill="#b98a1e"/>
+<text x="1160.0" y="2233.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">summary.jsonl</text>
+<path d="M1280.9,2231.0 L1258.0,2206.0 L1226.0,2172.0 L1226.0,2172.0 L1226.0,2172.0 L1226.0,2122.0 L1226.0,2122.0 L1226.0,2122.0 L1254.0,2056.0 L1277.5,2001.0" fill="none" stroke="#b98a1e" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1277.5,2001.0 1277.6,2010.8 1270.3,2007.7" fill="#b98a1e"/>
+<text x="1226.0" y="2147.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">finance_breakdown.jsonl</text>
+<path d="M1366.8,2120.0 L1354.0,2093.0 L1332.0,2045.0 L1311.2,2001.0" fill="none" stroke="#b98a1e" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1311.2,2001.0 1318.7,2007.4 1311.4,2010.8" fill="#b98a1e"/>
+<text x="1343.0" y="2069.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">implementer_performance.jsonl + targets/risks/context/ finance_qualitative/misc.jsonl</text>
+<path d="M700.0,3011.7 L569.0,2951.0 L280.0,2820.0 L280.0,2820.0 L280.0,2820.0 L280.0,2820.0 L280.0,2060.0 L280.0,2060.0 L341.0,1942.0 L379.4,1869.0" fill="none" stroke="#8493a4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="379.4,1869.0 378.7,1878.8 371.6,1875.1" fill="#8493a4"/>
+<text x="280.0" y="2820.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">autosave / load</text>
+<path d="M440.5,1869.0 L458.0,1883.0 L479.0,1902.0 L498.5,1926.0" fill="none" stroke="#b98a1e" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="498.5,1926.0 489.7,1921.5 495.9,1916.5" fill="#b98a1e"/>
+<text x="468.5" y="1892.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">app_state.json</text>
+<path d="M482.6,1926.0 L464.0,1911.0 L443.0,1892.0 L424.8,1869.0" fill="none" stroke="#3d72b4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="424.8,1869.0 433.5,1873.6 427.2,1878.5" fill="#3d72b4"/>
+<text x="453.5" y="1901.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">reload</text>
+<path d="M348.5,1800.0 L313.0,1775.0 L264.0,1741.0 L264.0,1741.0 L264.0,1741.0 L66.0,1591.0 L66.0,1591.0 L66.0,1591.0 L66.0,1591.0 L66.0,349.0 L66.0,349.0 L148.0,255.0 L202.0,193.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="202.0,193.0 199.1,202.4 193.0,197.2" fill="#2e8b57"/>
+<text x="66.0" y="1591.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">restores widgets</text>
+<path d="M1288.7,1926.0 L1280.0,1857.0 L1280.0,1697.0 L1289.3,1617.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="1289.3,1617.0 1292.3,1626.4 1284.3,1625.5" fill="#2e8b57"/>
+<text x="1280.0" y="1777.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">feature .jsonl files</text>
+<path d="M1269.3,1926.0 L1221.0,1851.0 L1131.0,1676.0 L1131.0,1676.0 L1131.0,1676.0 L1078.0,1646.0 L1037.1,1617.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="1037.1,1617.0 1046.7,1618.9 1042.1,1625.5" fill="#2e8b57"/>
+<text x="1131.0" y="1676.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">targets.jsonl</text>
+<path d="M1296.7,1617.0 L1306.0,1676.0 L1308.0,1837.0 L1297.8,1926.0" fill="none" stroke="#b98a1e" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1297.8,1926.0 1294.8,1916.6 1302.8,1917.5" fill="#b98a1e"/>
+<text x="1307.0" y="1756.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">feature_grades.jsonl</text>
+<path d="M1054.1,1617.0 L1101.0,1640.0 L1163.0,1676.0 L1163.0,1676.0 L1163.0,1676.0 L1245.0,1836.0 L1279.2,1926.0" fill="none" stroke="#b98a1e" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1279.2,1926.0 1272.3,1919.0 1279.8,1916.2" fill="#b98a1e"/>
+<text x="1163.0" y="1676.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">targets_embedding_features.jsonl</text>
+<path d="M997.7,1674.0 L998.0,1660.0 L998.0,1642.0 L998.5,1617.0" fill="none" stroke="#3d72b4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="998.5,1617.0 1002.3,1626.1 994.3,1625.9" fill="#3d72b4"/>
+<path d="M851.1,1452.0 L847.0,1439.0 L841.0,1420.0 L833.5,1395.0" fill="none" stroke="#3d72b4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="833.5,1395.0 840.0,1402.5 832.3,1404.8" fill="#3d72b4"/>
+<path d="M887.2,1563.0 L821.0,1547.0 L723.0,1524.0 L645.0,1505.6" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="645.0,1505.6 654.7,1503.8 652.8,1511.6" fill="#2e8b57"/>
+<text x="772.0" y="1535.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">embedding features</text>
+<path d="M664.0,1563.0 L641.0,1548.0 L607.0,1527.0 L574.2,1506.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="574.2,1506.0 583.9,1507.5 579.6,1514.2" fill="#2e8b57"/>
+<text x="624.0" y="1537.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">location features</text>
+<path d="M492.1,1452.0 L470.0,1437.0 L438.0,1416.0 L405.8,1395.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="405.8,1395.0 415.6,1396.6 411.2,1403.3" fill="#2e8b57"/>
+<path d="M603.4,1452.0 L643.0,1437.0 L702.0,1415.0 L754.6,1395.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="754.6,1395.0 747.6,1401.9 744.7,1394.5" fill="#2e8b57"/>
+<path d="M526.9,1452.0 L520.0,1416.0 L507.0,1341.0 L496.1,1284.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="496.1,1284.0 501.8,1292.1 493.9,1293.6" fill="#2e8b57"/>
+<text x="513.5" y="1378.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">prediction</text>
+<path d="M335.9,1341.0 L321.0,1327.0 L299.0,1307.0 L273.5,1284.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="273.5,1284.0 282.9,1287.1 277.5,1293.0" fill="#2e8b57"/>
+<text x="310.0" y="1317.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">shap_values</text>
+<path d="M825.8,1341.0 L826.0,1328.0 L826.0,1310.0 L825.8,1284.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="825.8,1284.0 829.9,1293.0 821.9,1293.0" fill="#2e8b57"/>
+<text x="826.0" y="1319.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">tag_predictions</text>
+<path d="M1319.6,1926.0 L1367.0,1858.0 L1470.0,1709.0 L1470.0,1709.0 L1470.0,1709.0 L1470.0,1709.0 L1470.0,829.0 L1470.0,829.0 L1273.0,696.0 L1166.5,624.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="1166.5,624.0 1176.2,625.7 1171.7,632.4" fill="#2e8b57"/>
+<text x="1470.0" y="1709.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">this activity</text>
+<path d="M1169.0,1050.0 L1169.0,1039.0 L1169.0,1020.0 L1168.8,993.0" fill="none" stroke="#8493a4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1168.8,993.0 1172.9,1002.0 1164.9,1002.0" fill="#8493a4"/>
+<text x="1169.0" y="1029.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">train_features.csv rows</text>
+<path d="M1140.5,924.0 L1130.0,911.0 L1115.0,891.0 L1095.5,867.0" fill="none" stroke="#3d72b4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1095.5,867.0 1104.3,871.5 1098.1,876.5" fill="#3d72b4"/>
+<text x="1122.5" y="901.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">activity_info + mock_forecasts</text>
+<path d="M951.1,924.0 L968.0,910.0 L992.0,890.0 L1019.8,867.0" fill="none" stroke="#3d72b4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1019.8,867.0 1015.4,875.8 1010.3,869.7" fill="#3d72b4"/>
+<text x="980.0" y="900.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">embeddings</text>
+<path d="M1065.0,792.0 L1065.0,779.0 L1065.0,760.0 L1065.2,735.0" fill="none" stroke="#3d72b4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1065.2,735.0 1069.2,744.0 1061.2,744.0" fill="#3d72b4"/>
+<path d="M1076.9,681.0 L1082.0,669.0 L1090.0,650.0 L1101.0,624.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="1101.0,624.0 1101.1,633.8 1093.8,630.7" fill="#2e8b57"/>
+<text x="1086.0" y="659.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">BM25 corpus</text>
+<path d="M1024.2,681.0 L989.0,658.0 L935.0,622.0 L935.0,622.0 L935.0,622.0 L916.0,552.0 L901.7,498.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="901.7,498.0 907.8,505.7 900.1,507.7" fill="#2e8b57"/>
+<text x="935.0" y="622.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">activity_info rows</text>
+<path d="M489.0,1209.0 L489.0,1160.0 L489.0,1071.0 L489.0,1071.0 L489.0,1071.0 L489.0,1071.0 L489.0,958.0 L489.0,958.0 L775.0,615.0 L872.1,498.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="872.1,498.0 869.4,507.5 863.3,502.4" fill="#2e8b57"/>
+<text x="489.0" y="1071.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">prediction</text>
+<path d="M1050.3,555.0 L1022.0,540.0 L982.0,519.0 L943.7,498.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="943.7,498.0 953.5,498.8 949.7,505.8" fill="#2e8b57"/>
+<text x="1002.0" y="529.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">similar activities</text>
+<path d="M894.2,444.0 L894.0,432.0 L894.0,414.0 L894.2,387.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="894.2,387.0 898.1,396.0 890.1,396.0" fill="#2e8b57"/>
+<path d="M112.8,2886.0 L79.0,2837.0 L0.0,2726.0 L0.0,2726.0 L0.0,2726.0 L0.0,2726.0 L0.0,349.0 L0.0,349.0 L41.0,314.0 L41.0,314.0 L41.0,314.0 L128.0,244.0 L190.0,193.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="190.0,193.0 185.6,201.8 180.5,195.6" fill="#2e8b57"/>
+<text x="0.0" y="1537.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">training_features</text>
+<path d="M461.7,1209.0 L426.0,1160.0 L360.0,1071.0 L360.0,1071.0 L360.0,1071.0 L360.0,1071.0 L360.0,349.0 L360.0,349.0 L297.0,256.0 L255.0,193.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="255.0,193.0 263.3,198.3 256.7,202.7" fill="#2e8b57"/>
+<text x="360.0" y="1071.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">prediction</text>
+<path d="M232.0,1209.0 L232.0,1160.0 L232.0,1071.0 L232.0,1071.0 L232.0,1071.0 L232.0,1071.0 L232.0,349.0 L232.0,349.0 L232.0,258.0 L232.0,193.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="232.0,193.0 236.0,202.0 228.0,202.0" fill="#2e8b57"/>
+<text x="232.0" y="1071.0" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">shap_result</text>
+<path d="M751.4,1209.0 L700.0,1183.0 L633.0,1150.0 L633.0,1150.0 L633.0,1150.0 L555.0,1071.0 L555.0,1071.0 L555.0,1071.0 L555.0,1071.0 L555.0,958.0 L555.0,958.0 L483.0,472.0 L483.0,472.0 L483.0,472.0 L483.0,472.0 L483.0,349.0 L483.0,349.0 L357.0,254.0 L277.2,193.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="277.2,193.0 286.7,195.3 281.9,201.6" fill="#2e8b57"/>
+<text x="555.0" y="1014.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">tag_predictions</text>
+<path d="M1336.9,1926.0 L1367.0,1900.0 L1407.0,1867.0 L1407.0,1867.0 L1407.0,1867.0 L1536.0,1709.0 L1536.0,1709.0 L1536.0,1709.0 L1536.0,1709.0 L1536.0,349.0 L1536.0,349.0 L1535.0,258.0 L1534.7,193.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="1534.7,193.0 1538.7,202.0 1530.7,202.0" fill="#2e8b57"/>
+<path d="M894.2,312.0 L894.0,283.0 L894.0,237.0 L894.3,193.0" fill="none" stroke="#2e8b57" stroke-width="1.4"/>
+<polygon points="894.3,193.0 898.2,202.0 890.2,202.0" fill="#2e8b57"/>
+<path d="M1185.0,139.0 L1185.0,124.0 L1185.0,99.0 L1185.0,67.0" fill="none" stroke="#8493a4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1185.0,67.0 1189.0,76.0 1181.0,76.0" fill="#8493a4"/>
+<text x="1185.0" y="111.5" font-size="9" fill="#5b6675" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">metrics</text>
+<path d="M833.0,3025.1 L1032.0,2973.0 L1633.0,2820.0 L1633.0,2820.0 L1633.0,2820.0 L1633.0,2820.0 L1633.0,349.0 L1633.0,349.0 L1694.0,256.0 L1735.7,193.0" fill="none" stroke="#8493a4" stroke-width="1.4" stroke-dasharray="5,4"/>
+<polygon points="1735.7,193.0 1734.0,202.7 1727.4,198.3" fill="#8493a4"/>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/activity_forecasting/upload.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/activity_forecasting/upload.py" target="_blank">
+<g><title>webapp/pages/activity_forecasting/upload.py
+
+User uploads a project-document PDF (or types activity details) on the Activity Forecasting page. Rendered by the upload submodule of the pages/activity_forecasting/ package.</title>
+<rect x="626.0" y="2881.0" width="307.0" height="65.0" rx="32.5" ry="32.5" fill="#2f7dc4" stroke="#1c4f80" stroke-width="1" opacity="1.0"/>
+<text x="779.5" y="2903.6" font-size="11.0" fill="#ffffff" text-anchor="middle">PDF upload</text>
+<text x="779.5" y="2917.3" font-size="11.0" fill="#ffffff" text-anchor="middle">/ manual entry</text>
+<text x="779.5" y="2931.1" font-size="11.0" fill="#ffffff" text-anchor="middle">webapp/pages/activity_forecasting/upload.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/app.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/app.py" target="_blank">
+<g><title>webapp/app.py
+
+Streamlit entrypoint. Renders the sidebar nav over 7 pages and loads the model + training data once at startup via model_loader.</title>
+<rect x="702.0" y="3010.0" width="129.0" height="65.0" rx="10" ry="10" fill="#dfe7ef" stroke="#6b7f96" stroke-width="1" opacity="1.0"/>
+<text x="766.5" y="3032.6" font-size="11.0" fill="#1b2733" text-anchor="middle">app.py</text>
+<text x="766.5" y="3046.3" font-size="11.0" fill="#1b2733" text-anchor="middle">(Streamlit host)</text>
+<text x="766.5" y="3060.1" font-size="11.0" fill="#1b2733" text-anchor="middle">webapp/app.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/model_loader.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/model_loader.py" target="_blank">
+<g><title>webapp/model_loader.py
+
+Loads the trained Random Forest + ExtraTrees ensemble, per-org baseline, start-year correction, feature medians, metadata, and training data from data/rating_model_outputs at startup.</title>
+<rect x="47.0" y="2888.0" width="169.0" height="50.0" rx="10" ry="10" fill="#dfe7ef" stroke="#6b7f96" stroke-width="1" opacity="1.0"/>
+<text x="131.5" y="2910.0" font-size="11.0" fill="#1b2733" text-anchor="middle">model_loader</text>
+<text x="131.5" y="2923.7" font-size="11.0" fill="#1b2733" text-anchor="middle">webapp/model_loader.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/tree/main/data/rating_model_outputs" href="https://github.com/morganrivers/iati_webapp/tree/main/data/rating_model_outputs" target="_blank">
+<g><title>data/rating_model_outputs/
+
+Trained Random Forest + ExtraTrees delta regressors (model.pkl, extra_model.pkl), plus per-org baseline (per_org_baseline.json), start-year correction (start_year_correction.json), feature medians (train_medians.json), and feature names (feature_names.json) produced offline by the forecasting model-training pipeline.</title>
+<rect x="31.0" y="3010.0" width="195.0" height="65.0" rx="32.5" ry="32.5" fill="#2f7dc4" stroke="#1c4f80" stroke-width="1" opacity="1.0"/>
+<text x="128.5" y="3032.6" font-size="11.0" fill="#ffffff" text-anchor="middle">model.pkl</text>
+<text x="128.5" y="3046.3" font-size="11.0" fill="#ffffff" text-anchor="middle">extra_model.pkl</text>
+<text x="128.5" y="3060.1" font-size="11.0" fill="#ffffff" text-anchor="middle">data/rating_model_outputs/</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/data/rating_model_outputs/train_features.csv" href="https://github.com/morganrivers/iati_webapp/blob/main/data/rating_model_outputs/train_features.csv" target="_blank">
+<g><title>data/rating_model_outputs/train_features.csv
+
+Historical IATI activity features + ratings. Used as the model&#x27;s reference distribution, for performance metrics, and as the RAG retrieval corpus. Consumed in several bands, so it is exported via the ✳ proxy convention (a small &#x27;train_features.csv ✳&#x27; chip beside each importer) rather than long lines.</title>
+<path d="M1560.0,3014.0 C1560.0,3005.0 1874.0,3005.0 1874.0,3014.0 L1874.0,3071.0 C1874.0,3080.0 1560.0,3080.0 1560.0,3071.0 Z" fill="#e6ecf3" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<path d="M1560.0,3014.0 C1560.0,3023.0 1874.0,3023.0 1874.0,3014.0" fill="none" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<text x="1717.0" y="3032.6" font-size="11.0" fill="#1b2733" text-anchor="middle">train_features.csv</text>
+<text x="1717.0" y="3046.3" font-size="11.0" fill="#1b2733" text-anchor="middle">(~1,300 activities)</text>
+<text x="1717.0" y="3060.1" font-size="11.0" fill="#1b2733" text-anchor="middle">data/rating_model_outputs/train_features.csv</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/data/rating_model_outputs/train_features.csv" href="https://github.com/morganrivers/iati_webapp/blob/main/data/rating_model_outputs/train_features.csv" target="_blank">
+<g><title>train_features.csv is exported via the ✳ proxy convention: each importer is drawn with a small &#x27;train_features.csv ✳&#x27; chip beside it rather than long lines from this file.</title>
+<path d="M1697.0,2897.0 L1753.0,2897.0 L1767.0,2911.0 L1767.0,2929.0 L1697.0,2929.0 Z" fill="#fdf3cf" stroke="#c9a227" stroke-width="1" opacity="1.0" stroke-dasharray="4,3"/>
+<path d="M1753.0,2897.0 L1753.0,2911.0 L1767.0,2911.0" fill="none" stroke="#c9a227" stroke-width="1" opacity="1.0"/>
+<text x="1732.0" y="2917.2" font-size="12.0" fill="#5b4a00" text-anchor="middle">✳</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/data/trained_umap_models_trainval.pkl" href="https://github.com/morganrivers/iati_webapp/blob/main/data/trained_umap_models_trainval.pkl" target="_blank">
+<g><title>data/trained_umap_models_trainval.pkl
+
+Saved UMAP reducers that compress target/summary embeddings into a small set of embedding features.</title>
+<rect x="863.0" y="1676.0" width="268.0" height="65.0" rx="32.5" ry="32.5" fill="#2f7dc4" stroke="#1c4f80" stroke-width="1" opacity="1.0"/>
+<text x="997.0" y="1698.6" font-size="11.0" fill="#ffffff" text-anchor="middle">trained_umap_models_</text>
+<text x="997.0" y="1712.3" font-size="11.0" fill="#ffffff" text-anchor="middle">trainval.pkl</text>
+<text x="997.0" y="1726.1" font-size="11.0" fill="#ffffff" text-anchor="middle">data/trained_umap_models_trainval.pkl</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/data/outcome_tags/tag_models.pkl" href="https://github.com/morganrivers/iati_webapp/blob/main/data/outcome_tags/tag_models.pkl" target="_blank">
+<g><title>data/outcome_tags/tag_models.pkl
+
+Per-outcome-tag classifiers produced offline by the forecasting model-training pipeline. Loaded at runtime by tag_model_loader.py and consumed by tag_predictor to score individual success dimensions.</title>
+<rect x="742.0" y="1454.0" width="235.0" height="50.0" rx="25.0" ry="25.0" fill="#2f7dc4" stroke="#1c4f80" stroke-width="1" opacity="1.0"/>
+<text x="859.5" y="1476.0" font-size="11.0" fill="#ffffff" text-anchor="middle">tag_models.pkl</text>
+<text x="859.5" y="1489.7" font-size="11.0" fill="#ffffff" text-anchor="middle">data/outcome_tags/tag_models.pkl</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/scripts/build_webapp_db.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/scripts/build_webapp_db.py" target="_blank">
+<g><title>webapp/scripts/build_webapp_db.py
+
+Offline one-off. Packs the training-data CSV plus summaries/risks/retrospective-forecast JSONL into data/webapp.db (tables activity_info and mock_forecasts).</title>
+<rect x="1048.0" y="926.0" width="241.0" height="65.0" rx="10" ry="10" fill="#dfe7ef" stroke="#6b7f96" stroke-width="1" opacity="1.0"/>
+<text x="1168.5" y="948.6" font-size="11.0" fill="#1b2733" text-anchor="middle">build_webapp_db</text>
+<text x="1168.5" y="962.4" font-size="11.0" fill="#1b2733" text-anchor="middle">(offline prep)</text>
+<text x="1168.5" y="976.1" font-size="11.0" fill="#1b2733" text-anchor="middle">webapp/scripts/build_webapp_db.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/build_embeddings_db.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/build_embeddings_db.py" target="_blank">
+<g><title>webapp/build_embeddings_db.py
+
+Offline one-off. Adds an embeddings table to data/webapp.db from activity_text_embeddings_gemini.jsonl, stored as float32 BLOBs so the DB is small enough to commit.</title>
+<rect x="802.0" y="926.0" width="215.0" height="65.0" rx="10" ry="10" fill="#dfe7ef" stroke="#6b7f96" stroke-width="1" opacity="1.0"/>
+<text x="909.5" y="948.6" font-size="11.0" fill="#1b2733" text-anchor="middle">build_embeddings_db</text>
+<text x="909.5" y="962.4" font-size="11.0" fill="#1b2733" text-anchor="middle">(offline prep)</text>
+<text x="909.5" y="976.1" font-size="11.0" fill="#1b2733" text-anchor="middle">webapp/build_embeddings_db.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/data/webapp.db" href="https://github.com/morganrivers/iati_webapp/blob/main/data/webapp.db" target="_blank">
+<g><title>data/webapp.db
+
+SQLite corpus database: activity_info, mock_forecasts, and embeddings tables. Built offline by the build_* scripts; read at runtime by sqlite_loaders.</title>
+<path d="M1007.0,801.0 C1007.0,792.0 1123.0,792.0 1123.0,801.0 L1123.0,858.0 C1123.0,867.0 1007.0,867.0 1007.0,858.0 Z" fill="#e6ecf3" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<path d="M1007.0,801.0 C1007.0,810.0 1123.0,810.0 1123.0,801.0" fill="none" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<text x="1065.0" y="819.6" font-size="11.0" fill="#1b2733" text-anchor="middle">webapp.db</text>
+<text x="1065.0" y="833.4" font-size="11.0" fill="#1b2733" text-anchor="middle">(SQLite)</text>
+<text x="1065.0" y="847.1" font-size="11.0" fill="#1b2733" text-anchor="middle">data/webapp.db</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/sqlite_loaders.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/sqlite_loaders.py" target="_blank">
+<g><title>webapp/modules/sqlite_loaders.py
+
+Runtime reader of webapp.db. Supplies the BM25 retrieval corpus, activity-info lookups, and lazy mock forecasts that ground the narrative forecast.</title>
+<rect x="948.0" y="683.0" width="235.0" height="50.0" rx="10" ry="10" fill="#f6d9c0" stroke="#c17a3a" stroke-width="1" opacity="1.0"/>
+<text x="1065.5" y="705.0" font-size="11.0" fill="#5a3410" text-anchor="middle">sqlite_loaders</text>
+<text x="1065.5" y="718.7" font-size="11.0" fill="#5a3410" text-anchor="middle">webapp/modules/sqlite_loaders.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/data/rating_model_outputs/train_features.csv" href="https://github.com/morganrivers/iati_webapp/blob/main/data/rating_model_outputs/train_features.csv" target="_blank">
+<g><title>Proxy for train_features.csv (see the ✳ node); loaded here by model_loader at startup.</title>
+<rect x="258.0" y="3025.0" width="156.0" height="35.0" rx="10" ry="10" fill="#eef2f7" stroke="#8493a4" stroke-width="1" opacity="1.0" stroke-dasharray="4,3"/>
+<text x="336.0" y="3045.7" font-size="9.0" fill="#5b6675" text-anchor="middle">train_features.csv ✳</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/data/rating_model_outputs/train_features.csv" href="https://github.com/morganrivers/iati_webapp/blob/main/data/rating_model_outputs/train_features.csv" target="_blank">
+<g><title>Proxy for train_features.csv (see the ✳ node); the historical-activity rows that build_webapp_db packs into webapp.db to become the RAG retrieval corpus.</title>
+<rect x="1091.0" y="1052.0" width="156.0" height="35.0" rx="10" ry="10" fill="#eef2f7" stroke="#8493a4" stroke-width="1" opacity="1.0" stroke-dasharray="4,3"/>
+<text x="1169.0" y="1072.7" font-size="9.0" fill="#5b6675" text-anchor="middle">train_features.csv ✳</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/data/rating_model_outputs/train_features.csv" href="https://github.com/morganrivers/iati_webapp/blob/main/data/rating_model_outputs/train_features.csv" target="_blank">
+<g><title>Proxy for train_features.csv (see the ✳ node); source of the validation metrics shown on the Model Performance page.</title>
+<rect x="1107.0" y="141.0" width="156.0" height="35.0" rx="10" ry="10" fill="#eef2f7" stroke="#8493a4" stroke-width="1" opacity="1.0" stroke-dasharray="4,3"/>
+<text x="1185.0" y="161.7" font-size="9.0" fill="#5b6675" text-anchor="middle">train_features.csv ✳</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/webapp_pipeline.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/webapp_pipeline.py" target="_blank">
+<g><title>webapp/modules/webapp_pipeline.py
+
+process_uploaded_pdf(): runs the 5-phase extraction on one PDF. Caches every output under projects/{activity_id}/ and reuses it on re-upload (activity_id = PDF content hash).</title>
+<rect x="876.0" y="2692.0" width="241.0" height="65.0" rx="10" ry="10" fill="#cfe6cf" stroke="#5a9367" stroke-width="1" opacity="1.0"/>
+<text x="996.5" y="2714.6" font-size="11.0" fill="#1e3a24" text-anchor="middle">webapp_pipeline</text>
+<text x="996.5" y="2728.3" font-size="11.0" fill="#1e3a24" text-anchor="middle">(orchestrator)</text>
+<text x="996.5" y="2742.1" font-size="11.0" fill="#1e3a24" text-anchor="middle">webapp/modules/webapp_pipeline.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/metadata_extractor.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/metadata_extractor.py" target="_blank">
+<g><title>webapp/modules/metadata_extractor.py
+
+Phase 1/5: LLM extracts title, reporting/participating orgs, country locations, and dates.</title>
+<rect x="857.0" y="2581.0" width="281.0" height="50.0" rx="10" ry="10" fill="#cfe6cf" stroke="#5a9367" stroke-width="1" opacity="1.0"/>
+<text x="997.5" y="2603.0" font-size="11.0" fill="#1e3a24" text-anchor="middle">🤖 metadata_extractor</text>
+<text x="997.5" y="2616.7" font-size="11.0" fill="#1e3a24" text-anchor="middle">webapp/modules/metadata_extractor.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/page_categorizer.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/page_categorizer.py" target="_blank">
+<g><title>webapp/modules/page_categorizer.py
+
+Phase 2/5: LLM labels each PDF page as table_of_contents, blank_page, glossary, references, core_activities, theory_of_change, targets, broader_context, preliminary_results, other, condensed_summary, sub_activities_outlined, detailed_implementation_plans, broad_objectives, possible_outcomes, quantitative_targets, qualitative_targets, risks_as_word_or_numeric, risks_or_dangers_generally, plans_to_address_key_risks, positive_indicators, progress_reports, similar_cases_outcomes, implementation_context_country, contextual_challenges, financing_details, budget_and_legal, who_implements, whether_part_of_larger_program, partner_identity_or_skill, whether_skin_in_the_game, other_stakeholder_engagement, activity_monitoring_details</title>
+<rect x="864.0" y="2470.0" width="268.0" height="50.0" rx="10" ry="10" fill="#cfe6cf" stroke="#5a9367" stroke-width="1" opacity="1.0"/>
+<text x="998.0" y="2492.0" font-size="11.0" fill="#1e3a24" text-anchor="middle">🤖 page_categorizer</text>
+<text x="998.0" y="2505.7" font-size="11.0" fill="#1e3a24" text-anchor="middle">webapp/modules/page_categorizer.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/summary_generator.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/summary_generator.py" target="_blank">
+<g><title>webapp/modules/summary_generator.py
+
+Phase 3/5: LLM writes an activity-description summary from the categorized pages.</title>
+<rect x="1044.0" y="2359.0" width="275.0" height="50.0" rx="10" ry="10" fill="#cfe6cf" stroke="#5a9367" stroke-width="1" opacity="1.0"/>
+<text x="1181.5" y="2381.0" font-size="11.0" fill="#1e3a24" text-anchor="middle">🤖 summary_generator</text>
+<text x="1181.5" y="2394.7" font-size="11.0" fill="#1e3a24" text-anchor="middle">webapp/modules/summary_generator.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/finance_extractor.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/finance_extractor.py" target="_blank">
+<g><title>webapp/modules/finance_extractor.py
+
+Phase 4/5: LLM extracts a finance breakdown (allocations, total amount); a companion sector_extractor.py allocates expenditure across the model&#x27;s sector clusters in the same phase.</title>
+<rect x="1175.0" y="2233.0" width="275.0" height="65.0" rx="10" ry="10" fill="#cfe6cf" stroke="#5a9367" stroke-width="1" opacity="1.0"/>
+<text x="1312.5" y="2255.6" font-size="11.0" fill="#1e3a24" text-anchor="middle">🤖 finance_extractor</text>
+<text x="1312.5" y="2269.3" font-size="11.0" fill="#1e3a24" text-anchor="middle">(+ sector_extractor)</text>
+<text x="1312.5" y="2283.1" font-size="11.0" fill="#1e3a24" text-anchor="middle">webapp/modules/finance_extractor.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/feature_extractor.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/feature_extractor.py" target="_blank">
+<g><title>webapp/modules/feature_extractor.py
+
+Phase 5/5: LLM extracts baseline features: implementer performance, targets, risks, context, finance-qualitative, and complexity/integratedness.</title>
+<rect x="1242.0" y="2122.0" width="275.0" height="50.0" rx="10" ry="10" fill="#cfe6cf" stroke="#5a9367" stroke-width="1" opacity="1.0"/>
+<text x="1379.5" y="2144.0" font-size="11.0" fill="#1e3a24" text-anchor="middle">🤖 feature_extractor</text>
+<text x="1379.5" y="2157.7" font-size="11.0" fill="#1e3a24" text-anchor="middle">webapp/modules/feature_extractor.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/tree/main/projects/webapp_39a1625529b1" href="https://github.com/morganrivers/iati_webapp/tree/main/projects/webapp_39a1625529b1" target="_blank">
+<g><title>projects/{activity_id}/
+
+Per-PDF extraction artifacts: uploaded.pdf plus metadata.json and implementer_performance.jsonl / targets.jsonl / risks.jsonl / context.jsonl / finance_qualitative.jsonl / misc.jsonl / page_categories.jsonl / summary.jsonl / finance_breakdown.jsonl. Written by the extraction phases; the PREDICT band later writes feature_grades.jsonl and targets_embedding_features.jsonl back here. Reused on re-upload of the same PDF.</title>
+<path d="M1186.0,1935.0 C1186.0,1926.0 1401.0,1926.0 1401.0,1935.0 L1401.0,1992.0 C1401.0,2001.0 1186.0,2001.0 1186.0,1992.0 Z" fill="#e6ecf3" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<path d="M1186.0,1935.0 C1186.0,1944.0 1401.0,1944.0 1401.0,1935.0" fill="none" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<text x="1293.5" y="1953.6" font-size="11.0" fill="#1b2733" text-anchor="middle">projects/{activity_id}/</text>
+<text x="1293.5" y="1967.3" font-size="11.0" fill="#1b2733" text-anchor="middle">(uploaded.pdf + phase .jsonl)</text>
+<text x="1293.5" y="1981.1" font-size="11.0" fill="#1b2733" text-anchor="middle">projects/{activity_id}/</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/projects/webapp_39a1625529b1/app_state.json" href="https://github.com/morganrivers/iati_webapp/blob/main/projects/webapp_39a1625529b1/app_state.json" target="_blank">
+<g><title>projects/{activity_id}/app_state.json
+
+Saved webapp session for this activity: all widget values, user edits, and the last prediction. Written to app_state_temp.json then app_state.json. Separate lifecycle from extraction: it persists and restores the user&#x27;s working session, not PDF-derived data.</title>
+<path d="M395.0,1935.0 C395.0,1926.0 663.0,1926.0 663.0,1935.0 L663.0,1992.0 C663.0,2001.0 395.0,2001.0 395.0,1992.0 Z" fill="#e6ecf3" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<path d="M395.0,1935.0 C395.0,1944.0 663.0,1944.0 663.0,1935.0" fill="none" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<text x="529.0" y="1953.6" font-size="11.0" fill="#1b2733" text-anchor="middle">app_state.json</text>
+<text x="529.0" y="1967.3" font-size="11.0" fill="#1b2733" text-anchor="middle">(+ project_name.txt)</text>
+<text x="529.0" y="1981.1" font-size="11.0" fill="#1b2733" text-anchor="middle">projects/{activity_id}/app_state.json</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/project_manager.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/project_manager.py" target="_blank">
+<g><title>webapp/project_manager.py
+
+Saves and reloads a working session. Serialises st.session_state to app_state.json (autosaved via save_project_state_temp) and restores it into the page widgets on load.</title>
+<rect x="303.0" y="1802.0" width="189.0" height="65.0" rx="10" ry="10" fill="#e6ecf3" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<text x="397.5" y="1824.6" font-size="11.0" fill="#1b2733" text-anchor="middle">project_manager</text>
+<text x="397.5" y="1838.3" font-size="11.0" fill="#1b2733" text-anchor="middle">+ state_manager</text>
+<text x="397.5" y="1852.1" font-size="11.0" fill="#1b2733" text-anchor="middle">webapp/project_manager.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/feature_grader.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/feature_grader.py" target="_blank">
+<g><title>webapp/modules/feature_grader.py
+
+LLM grades the extracted free-text features into the numeric scores the RF model expects.</title>
+<rect x="1165.0" y="1565.0" width="255.0" height="50.0" rx="10" ry="10" fill="#e6d6f2" stroke="#8a5fb0" stroke-width="1" opacity="1.0"/>
+<text x="1292.5" y="1587.0" font-size="11.0" fill="#3d2757" text-anchor="middle">🤖 feature_grader</text>
+<text x="1292.5" y="1600.7" font-size="11.0" fill="#3d2757" text-anchor="middle">webapp/modules/feature_grader.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/targets_embedder.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/targets_embedder.py" target="_blank">
+<g><title>webapp/modules/targets_embedder.py
+
+Embeds targets/summary text and projects it through the saved UMAP models into embedding features.</title>
+<rect x="865.0" y="1565.0" width="268.0" height="50.0" rx="10" ry="10" fill="#e6d6f2" stroke="#8a5fb0" stroke-width="1" opacity="1.0"/>
+<text x="999.0" y="1587.0" font-size="11.0" fill="#3d2757" text-anchor="middle">🤖 targets_embedder</text>
+<text x="999.0" y="1600.7" font-size="11.0" fill="#3d2757" text-anchor="middle">webapp/modules/targets_embedder.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/location_features.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/location_features.py" target="_blank">
+<g><title>webapp/modules/location_features.py
+
+Derives GDP / CPIA / governance and region indicators plus reporting-org dummies from the activity&#x27;s location and organisation.</title>
+<rect x="578.0" y="1565.0" width="255.0" height="50.0" rx="10" ry="10" fill="#e6d6f2" stroke="#8a5fb0" stroke-width="1" opacity="1.0"/>
+<text x="705.5" y="1587.0" font-size="11.0" fill="#3d2757" text-anchor="middle">location_features</text>
+<text x="705.5" y="1600.7" font-size="11.0" fill="#3d2757" text-anchor="middle">webapp/modules/location_features.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/rf_predictor.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/rf_predictor.py" target="_blank">
+<g><title>webapp/modules/rf_predictor.py
+
+impute_and_run_statistical_model(): imputes the assembled feature vector, then combines a per-org-mode baseline with the RF + ExtraTrees delta ensemble (clipped to 0–5) plus a start-year drift correction to produce the overall success rating.</title>
+<rect x="421.0" y="1454.0" width="222.0" height="50.0" rx="10" ry="10" fill="#e6d6f2" stroke="#8a5fb0" stroke-width="1" opacity="1.0"/>
+<text x="532.0" y="1476.0" font-size="11.0" fill="#3d2757" text-anchor="middle">rf_predictor</text>
+<text x="532.0" y="1489.7" font-size="11.0" fill="#3d2757" text-anchor="middle">webapp/modules/rf_predictor.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/tag_predictor.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/tag_predictor.py" target="_blank">
+<g><title>webapp/tag_predictor.py
+
+Per-outcome-tag classifiers predict probabilities for individual success dimensions.</title>
+<rect x="738.0" y="1343.0" width="175.0" height="50.0" rx="10" ry="10" fill="#e6d6f2" stroke="#8a5fb0" stroke-width="1" opacity="1.0"/>
+<text x="825.5" y="1365.0" font-size="11.0" fill="#3d2757" text-anchor="middle">tag_predictor</text>
+<text x="825.5" y="1378.7" font-size="11.0" fill="#3d2757" text-anchor="middle">webapp/tag_predictor.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/shap_explainer.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/shap_explainer.py" target="_blank">
+<g><title>webapp/modules/shap_explainer.py
+
+Decomposes the RF prediction into signed per-feature contributions via tree_contributions.</title>
+<rect x="247.0" y="1343.0" width="235.0" height="50.0" rx="10" ry="10" fill="#e6d6f2" stroke="#8a5fb0" stroke-width="1" opacity="1.0"/>
+<text x="364.5" y="1365.0" font-size="11.0" fill="#3d2757" text-anchor="middle">shap_explainer</text>
+<text x="364.5" y="1378.7" font-size="11.0" fill="#3d2757" text-anchor="middle">webapp/modules/shap_explainer.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_activity_forecasting.py#L331" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_activity_forecasting.py#L331" target="_blank">
+<g><title>st.session_state[&#x27;prediction&#x27;]
+
+Overall success rating on a 0–5 scale: per-org baseline + RF/ExtraTrees ensemble delta + start-year correction (base, ens_delta, prediction). Written by the forecast handler in page_activity_forecasting.py; held in Streamlit session_state.</title>
+<path d="M378.0,1218.0 C378.0,1209.0 600.0,1209.0 600.0,1218.0 L600.0,1275.0 C600.0,1284.0 378.0,1284.0 378.0,1275.0 Z" fill="#e6ecf3" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<path d="M378.0,1218.0 C378.0,1227.0 600.0,1227.0 600.0,1218.0" fill="none" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<text x="489.0" y="1236.6" font-size="11.0" fill="#1b2733" text-anchor="middle">session_state</text>
+<text x="489.0" y="1250.3" font-size="11.0" fill="#1b2733" text-anchor="middle">[&#x27;prediction&#x27;]</text>
+<text x="489.0" y="1264.1" font-size="11.0" fill="#1b2733" text-anchor="middle">st.session_state[&#x27;prediction&#x27;]</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_activity_forecasting.py#L337" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_activity_forecasting.py#L337" target="_blank">
+<g><title>st.session_state[&#x27;shap_result&#x27;]
+
+Per-feature SHAP contribution breakdown plus base_value, from shap_explainer.compute_shap_values. Held in session_state; rendered as the contribution waterfall.</title>
+<path d="M118.0,1218.0 C118.0,1209.0 346.0,1209.0 346.0,1218.0 L346.0,1275.0 C346.0,1284.0 118.0,1284.0 118.0,1275.0 Z" fill="#e6ecf3" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<path d="M118.0,1218.0 C118.0,1227.0 346.0,1227.0 346.0,1218.0" fill="none" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<text x="232.0" y="1236.6" font-size="11.0" fill="#1b2733" text-anchor="middle">session_state</text>
+<text x="232.0" y="1250.3" font-size="11.0" fill="#1b2733" text-anchor="middle">[&#x27;shap_result&#x27;]</text>
+<text x="232.0" y="1264.1" font-size="11.0" fill="#1b2733" text-anchor="middle">st.session_state[&#x27;shap_result&#x27;]</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_activity_forecasting.py#L344" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_activity_forecasting.py#L344" target="_blank">
+<g><title>st.session_state[&#x27;tag_predictions&#x27;]
+
+Per-outcome-tag probabilities {tag: p}, from tag_predictor.predict_outcome_tags. Held in session_state; rendered as the per-dimension tag panel.</title>
+<path d="M698.0,1218.0 C698.0,1209.0 953.0,1209.0 953.0,1218.0 L953.0,1275.0 C953.0,1284.0 698.0,1284.0 698.0,1275.0 Z" fill="#e6ecf3" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<path d="M698.0,1218.0 C698.0,1227.0 953.0,1227.0 953.0,1218.0" fill="none" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<text x="825.5" y="1236.6" font-size="11.0" fill="#1b2733" text-anchor="middle">session_state</text>
+<text x="825.5" y="1250.3" font-size="11.0" fill="#1b2733" text-anchor="middle">[&#x27;tag_predictions&#x27;]</text>
+<text x="825.5" y="1264.1" font-size="11.0" fill="#1b2733" text-anchor="middle">st.session_state[&#x27;tag_predictions&#x27;]</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/rag_bm25.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/modules/rag_bm25.py" target="_blank">
+<g><title>webapp/modules/rag_bm25.py
+
+Retrieves the most similar historical activities (BM25 by default, or Gemini-embedding cosine) to ground the narrative forecast.</title>
+<rect x="1008.0" y="557.0" width="215.0" height="65.0" rx="10" ry="10" fill="#f6d9c0" stroke="#c17a3a" stroke-width="1" opacity="1.0"/>
+<text x="1115.5" y="579.6" font-size="11.0" fill="#5a3410" text-anchor="middle">🤖 rag_bm25</text>
+<text x="1115.5" y="593.4" font-size="11.0" fill="#5a3410" text-anchor="middle">(retrieval)</text>
+<text x="1115.5" y="607.1" font-size="11.0" fill="#5a3410" text-anchor="middle">webapp/modules/rag_bm25.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/run_rag_forecast.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/run_rag_forecast.py" target="_blank">
+<g><title>webapp/run_rag_forecast.py
+
+Synthesizes an LLM narrative forecast of likely outcomes, using the RF prediction as a reference point and the retrieved neighbours as evidence.</title>
+<rect x="787.0" y="446.0" width="215.0" height="50.0" rx="10" ry="10" fill="#f6d9c0" stroke="#c17a3a" stroke-width="1" opacity="1.0"/>
+<text x="894.5" y="468.0" font-size="11.0" fill="#5a3410" text-anchor="middle">🤖 run_rag_forecast</text>
+<text x="894.5" y="481.7" font-size="11.0" fill="#5a3410" text-anchor="middle">webapp/run_rag_forecast.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_rag_forecast.py#L229" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_rag_forecast.py#L229" target="_blank">
+<g><title>st.session_state[&#x27;rag_last_log&#x27;]
+
+Free-text outcome forecast with commentary, accumulated as log lines by run_rag_forecast and shown on the Narrative Forecast page.</title>
+<path d="M777.0,321.0 C777.0,312.0 1012.0,312.0 1012.0,321.0 L1012.0,378.0 C1012.0,387.0 777.0,387.0 777.0,378.0 Z" fill="#e6ecf3" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<path d="M777.0,321.0 C777.0,330.0 1012.0,330.0 1012.0,321.0" fill="none" stroke="#8493a4" stroke-width="1" opacity="1.0"/>
+<text x="894.5" y="339.6" font-size="11.0" fill="#1b2733" text-anchor="middle">session_state</text>
+<text x="894.5" y="353.4" font-size="11.0" fill="#1b2733" text-anchor="middle">[&#x27;rag_last_log&#x27;]</text>
+<text x="894.5" y="367.1" font-size="11.0" fill="#1b2733" text-anchor="middle">st.session_state[&#x27;rag_last_log&#x27;]</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_activity_forecasting.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_activity_forecasting.py" target="_blank">
+<g><title>webapp/pages/page_activity_forecasting.py
+
+Main page, now a thin orchestrator over the pages/activity_forecasting/ subpackage (project_selector, upload, inputs, sectors, grading, embeddings, analysis, tags): drives extraction + prediction and shows the rating, editable feature sliders, and SHAP annotations.</title>
+<rect x="85.0" y="126.0" width="294.0" height="65.0" rx="10" ry="10" fill="#cfe8e6" stroke="#4f9b95" stroke-width="1" opacity="1.0"/>
+<text x="232.0" y="148.6" font-size="11.0" fill="#163a37" text-anchor="middle">Activity</text>
+<text x="232.0" y="162.3" font-size="11.0" fill="#163a37" text-anchor="middle">Forecasting</text>
+<text x="232.0" y="176.1" font-size="11.0" fill="#163a37" text-anchor="middle">webapp/pages/page_activity_forecasting.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_extracted_data.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_extracted_data.py" target="_blank">
+<g><title>webapp/pages/page_extracted_data.py
+
+Displays the raw cached extraction outputs for the uploaded PDF.</title>
+<rect x="1407.0" y="126.0" width="255.0" height="65.0" rx="10" ry="10" fill="#cfe8e6" stroke="#4f9b95" stroke-width="1" opacity="1.0"/>
+<text x="1534.5" y="148.6" font-size="11.0" fill="#163a37" text-anchor="middle">View Extracted</text>
+<text x="1534.5" y="162.3" font-size="11.0" fill="#163a37" text-anchor="middle">Data</text>
+<text x="1534.5" y="176.1" font-size="11.0" fill="#163a37" text-anchor="middle">webapp/pages/page_extracted_data.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_rag_forecast.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_rag_forecast.py" target="_blank">
+<g><title>webapp/pages/page_rag_forecast.py
+
+Runs and displays the RAG narrative forecast.</title>
+<rect x="774.0" y="126.0" width="241.0" height="65.0" rx="10" ry="10" fill="#cfe8e6" stroke="#4f9b95" stroke-width="1" opacity="1.0"/>
+<text x="894.5" y="148.6" font-size="11.0" fill="#163a37" text-anchor="middle">Narrative</text>
+<text x="894.5" y="162.3" font-size="11.0" fill="#163a37" text-anchor="middle">Forecast [beta]</text>
+<text x="894.5" y="176.1" font-size="11.0" fill="#163a37" text-anchor="middle">webapp/pages/page_rag_forecast.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_model_performance.py" href="https://github.com/morganrivers/iati_webapp/blob/main/webapp/pages/page_model_performance.py" target="_blank">
+<g><title>webapp/pages/page_model_performance.py
+
+Shows model accuracy / explained-variance metrics against the validation set.</title>
+<rect x="1048.0" y="-0.0" width="274.0" height="65.0" rx="10" ry="10" fill="#cfe8e6" stroke="#4f9b95" stroke-width="1" opacity="1.0"/>
+<text x="1185.0" y="22.6" font-size="11.0" fill="#163a37" text-anchor="middle">Model</text>
+<text x="1185.0" y="36.4" font-size="11.0" fill="#163a37" text-anchor="middle">Performance</text>
+<text x="1185.0" y="50.1" font-size="11.0" fill="#163a37" text-anchor="middle">webapp/pages/page_model_performance.py</text>
+</g>
+</a>
+<a xlink:href="https://github.com/morganrivers/iati_webapp/tree/main/webapp/pages" href="https://github.com/morganrivers/iati_webapp/tree/main/webapp/pages" target="_blank">
+<g><title>webapp/pages/
+
+Static informational pages: glossary of terms, project background, and a feedback form.</title>
+<rect x="1694.0" y="126.0" width="129.0" height="65.0" rx="10" ry="10" fill="#cfe8e6" stroke="#4f9b95" stroke-width="1" opacity="1.0"/>
+<text x="1758.5" y="148.6" font-size="11.0" fill="#163a37" text-anchor="middle">Glossary /</text>
+<text x="1758.5" y="162.3" font-size="11.0" fill="#163a37" text-anchor="middle">About / Feedback</text>
+<text x="1758.5" y="176.1" font-size="11.0" fill="#163a37" text-anchor="middle">webapp/pages/</text>
+</g>
+</a>
+</svg>

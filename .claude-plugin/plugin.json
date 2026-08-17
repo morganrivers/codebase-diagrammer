@@ -1,0 +1,14 @@
+{
+  "name": "codebase-diagrammer",
+  "displayName": "Codebase Diagrammer",
+  "version": "0.1.0",
+  "description": "Generate editable draw.io architecture and data-flow diagrams of a codebase, laid out with Graphviz and rendered to SVG/PNG.",
+  "author": {
+    "name": "morganrivers",
+    "url": "https://github.com/morganrivers"
+  },
+  "repository": "https://github.com/morganrivers/codebase-diagrammer",
+  "license": "Unlicense",
+  "keywords": ["diagram", "graphviz", "drawio", "architecture", "documentation"],
+  "skills": "./skills/"
+}
