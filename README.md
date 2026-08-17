@@ -1,6 +1,6 @@
 # codebase-diagrammer
 
-**one-shot claude-opus-5, but useful**
+**This whole codebase is a one-shot claude-opus-5, but I find it useful. README below is all Claude as well**
 
 A Claude Code skill that turns a repository into an editable draw.io diagram:
 Claude reads the code and writes a graph JSON, Graphviz lays it out, and the
