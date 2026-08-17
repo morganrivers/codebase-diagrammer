@@ -48,6 +48,8 @@ or just ask Claude to diagram how the repo fits together.
 python3 skills/codebase-diagram/scripts/check_deps.py
 ```
 
+Diagrams can be viewed at `draw.io` using the upload tool, or from a downloaded drawio application on your computer offline.
+
 ## Using the scripts without Claude
 
 The pipeline is a normal command-line tool. Write a graph JSON by hand
