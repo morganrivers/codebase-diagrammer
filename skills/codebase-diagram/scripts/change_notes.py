@@ -22,6 +22,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 MODEL = 'claude-opus-5-5'
 PATCH_LINES = 150          # lines of one file's patch sent to the model
+PATCH_CHARS = 20_000       # and at most this much of it: one line can be megabytes (a built HTML page)
 PROMPT_CHARS = 120_000     # patch text in one call; a bigger commit is split over several calls
 BATCH_FILES = 40           # files in one call
 NO_PATCH = ('pnpm-lock.yaml', 'package-lock.json', 'yarn.lock', '.png', '.svg', '.drawio', '.parquet')
@@ -298,7 +299,10 @@ class CommitSummaries(ClaudeCache):
 
 
 def _patch_text(f):
-    """The patch text sent for one file: none for binaries and lockfiles, else its first PATCH_LINES lines."""
+    """The patch text sent for one file: none for binaries and lockfiles, else its first
+    PATCH_LINES lines, cut at PATCH_CHARS with a marker saying so."""
     if f['binary'] or f['path'].endswith(NO_PATCH):
         return ''
-    return '\n'.join(f['patch'].split('\n')[:PATCH_LINES])
+    text = '\n'.join(f['patch'].split('\n')[:PATCH_LINES])
+    return text if len(text) <= PATCH_CHARS else text[:PATCH_CHARS] + f'\n[patch cut at {PATCH_CHARS} characters]'
+
