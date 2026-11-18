@@ -233,8 +233,10 @@ def edge_svg(e, verts):
 
 
 def render_svg(verts, edges, pad=30):
-    xs = [v['x'] for v in verts.values()] + [v['x'] + v['w'] for v in verts.values()]
-    ys = [v['y'] for v in verts.values()] + [v['y'] + v['h'] for v in verts.values()]
+    # Bounds take in edge waypoints too: Graphviz may route an edge outside every box.
+    pts = [p for e in edges for p in e['pts']]
+    xs = [v['x'] for v in verts.values()] + [v['x'] + v['w'] for v in verts.values()] + [p[0] for p in pts]
+    ys = [v['y'] for v in verts.values()] + [v['y'] + v['h'] for v in verts.values()] + [p[1] for p in pts]
     minx, miny, maxx, maxy = min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad
     W, H = maxx - minx, maxy - miny
     body = [f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
@@ -249,15 +251,21 @@ def render_svg(verts, edges, pad=30):
     for v in boxes:
         body.append(shape_svg(v))
         body.append(text_svg(v['x'], v['y'], v['w'], v['h'], label_lines(v['label']), v['style']))
+    # class/data attributes let delta_viewer.py find a node or edge by graph id
     for e in edges:
         link = e.get('link', '')
+        body.append(f'<g class="edge" data-src="{esc(e["src"] or "")}" data-dst="{esc(e["dst"] or "")}">')
         if link:
             body.append(f'<a xlink:href="{esc(link)}" href="{esc(link)}" target="_blank">')
         body.append(title_group(e.get('tip', ''), edge_svg(e, verts)))
         if link:
             body.append('</a>')
-    for v in nodes:
+        body.append('</g>')
+    for nid, v in verts.items():
+        if v not in nodes:
+            continue
         link = v.get('link', '')
+        body.append(f'<g class="node" data-id="{esc(nid)}">')
         if link:
             body.append(f'<a xlink:href="{esc(link)}" href="{esc(link)}" target="_blank">')
         body.append(title_group(v.get('tip', ''), shape_svg(v) + '\n' +
@@ -265,6 +273,7 @@ def render_svg(verts, edges, pad=30):
                                          label_lines(v['label']), v['style'])))
         if link:
             body.append('</a>')
+        body.append('</g>')
     body.append('</svg>')
     return '\n'.join(body)
 

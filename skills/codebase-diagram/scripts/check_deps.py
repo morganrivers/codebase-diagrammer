@@ -5,6 +5,8 @@ command that fixes each gap. Run it before the first build in a repo.
 
 Hard requirements: Graphviz `dot` (layout) and defusedxml (reading .drawio).
 Soft: a rasteriser, needed only for PNG. SVG is always produced without one.
+Soft, for the delta viewer only: lizard (metrics tab), gh (PR titles and
+bodies) and the claude CLI (file notes and summaries; --no-notes skips them).
 Exit status is 1 when a hard requirement is missing, 0 otherwise.
 """
 import importlib, shutil, subprocess, sys
@@ -13,6 +15,9 @@ HINT = {
     'dot': 'micromamba install -n py311 graphviz   (or: apt install graphviz)',
     'defusedxml': 'micromamba install -n py311 defusedxml   (or: pip install defusedxml)',
     'raster': 'pip install cairosvg   (or install librsvg / inkscape / imagemagick)',
+    'lizard': 'pip install lizard   (delta viewer metrics tab)',
+    'gh': 'install the GitHub CLI and run gh auth login   (delta viewer PR titles and bodies)',
+    'claude': 'install Claude Code   (delta viewer notes and summaries; or build with --no-notes)',
 }
 RASTERISERS = ('rsvg-convert', 'inkscape', 'convert')
 
@@ -48,6 +53,9 @@ def main():
     rows.append(('defusedxml', have_module('defusedxml'), 'importable' if have_module('defusedxml') else HINT['defusedxml'], True))
     tool = rasteriser()
     rows.append(('PNG rasteriser', bool(tool), tool or HINT['raster'], False))
+    rows.append(('lizard', have_module('lizard'), 'importable' if have_module('lizard') else HINT['lizard'], False))
+    for cli in ('gh', 'claude'):
+        rows.append((f'{cli} CLI', bool(shutil.which(cli)), shutil.which(cli) or HINT[cli], False))
 
     missing_hard = False
     for name, ok, detail, hard in rows:

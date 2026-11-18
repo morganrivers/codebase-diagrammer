@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Delta viewer</title>
+<style>
+  :root { --add: #1e8e3e; --mod: #d08700; --del: #c5221f; --line: #d5dbe2; --muted: #5b6675; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 13px/1.4 Helvetica, Arial, sans-serif; color: #1b2733; height: 100vh;
+         display: grid; grid-template-columns: 300px 1fr 6px var(--detail-w, 440px); grid-template-rows: 40px 1fr; }
+  header { grid-column: 1 / 5; display: flex; align-items: center; gap: 12px; padding: 0 12px;
+           border-bottom: 1px solid var(--line); background: #f6f8fa; }
+  header h1 { font-size: 14px; margin: 0; }
+  .tabs button, .zoom button { border: 1px solid var(--line); background: #fff; padding: 4px 10px;
+           border-radius: 4px; cursor: pointer; font: inherit; white-space: nowrap; }
+  .tabs button.on, .zoom button#diffmode.on, .zoom button#prview.on { background: #1b2733; color: #fff; border-color: #1b2733; }
+  .zoom { margin-left: auto; display: flex; gap: 4px; align-items: center; }
+  .legend span { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin: 0 3px 0 10px; }
+  #commits { overflow: auto; border-right: 1px solid var(--line); }
+  .c { padding: 8px 10px; border-bottom: 1px solid #eef1f4; cursor: pointer; }
+  .c:hover { background: #f3f6f9; }
+  .c.on { background: #e3ecf7; }
+  .c:focus-visible { outline: 2px solid #2f7dc4; outline-offset: -2px; }
+  .c .meta { color: var(--muted); font-size: 11px; }
+  .c .hits { font-size: 11px; color: var(--mod); }
+  .c.br { border-left: 4px solid #8a5fb0; background: #faf7fd; }
+  .c .tag { display: inline-block; font-size: 10px; font-weight: bold; color: #fff; background: #8a5fb0; border-radius: 3px; padding: 0 4px; margin-right: 4px; }
+  .kids { border-left: 3px solid #cfd8e3; margin-left: 10px; display: none; }
+  .kids.open { display: block; }
+  .kids .c { padding: 6px 8px; font-size: 12px; }
+  .toggle { color: #2f7dc4; font-size: 11px; cursor: pointer; }
+  .c .anote { font-size: 11px; color: var(--del); font-style: italic; }
+  #stage { overflow: auto; background: #fff; position: relative; }
+  #stage svg { display: block; }
+  #grip { cursor: col-resize; background: #f6f8fa; border-left: 1px solid var(--line); }
+  #grip:hover, #grip.drag { background: #cfd8e3; }
+  body.resizing { user-select: none; cursor: col-resize; }
+  #detail { overflow: auto; border-left: 1px solid var(--line); padding: 10px 12px; }
+  #detail h2 { font-size: 14px; margin: 0 0 4px; }
+  #detail pre.body { white-space: pre-wrap; background: #f6f8fa; padding: 6px; border-radius: 4px; font-size: 12px; }
+  .note { background: #fff4d6; border: 1px solid #e8c766; padding: 4px 6px; border-radius: 4px; margin: 6px 0; font-size: 12px; }
+  .grp { margin-top: 10px; }
+  .grp h3 { font-size: 12px; margin: 0 0 4px; color: var(--muted); text-transform: uppercase; }
+  .f { display: flex; gap: 6px; padding: 2px 4px; cursor: pointer; border-radius: 3px; font-family: monospace; font-size: 12px; }
+  .f:hover { background: #f3f6f9; }
+  .f.on { background: #e3ecf7; }
+  .f .st { width: 14px; font-weight: bold; }
+  .f .n { margin-left: auto; white-space: nowrap; }
+  .A { color: var(--add); } .M { color: var(--mod); } .D { color: var(--del); }
+  .plus { color: var(--add); } .minus { color: var(--del); }
+  pre.diff { font: 11px/1.35 monospace; overflow: auto; border: 1px solid var(--line); border-radius: 4px; margin: 6px 0; }
+  pre.diff div { padding: 0 6px; white-space: pre; }
+  pre.diff .a { background: #e6f4ea; } pre.diff .d { background: #fce8e6; } pre.diff .h { background: #eef1f4; color: var(--muted); }
+  svg g.node.dim, svg g.edge.dim { opacity: 0.18; }
+  svg g.node.hit { filter: drop-shadow(0 0 0 transparent); }
+  svg g.node.pick > * { outline: none; }
+  svg .ring { fill: none; stroke-width: 5; rx: 10; pointer-events: none; }
+  svg .badge { pointer-events: none; } svg .badge rect { rx: 4; } svg .badge text { font: bold 13px Helvetica, Arial, sans-serif; fill: #fff; }
+  svg g.node { cursor: pointer; }
+  body.metrics .legend, body.metrics .zoom button:not(#prview) { display: none; }
+  details.prbody summary { cursor: pointer; color: #2f7dc4; font-size: 12px; margin-top: 6px; }
+  .c .folded { font-size: 11px; color: var(--muted); }
+  #metrics { padding: 12px 16px; --series: #2a78d6; --grid: #e6e9ed; --surface: #fff; }
+  #metrics .intro { color: var(--muted); font-size: 12px; margin: 0 0 10px; max-width: 900px; }
+  #metrics .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px; }
+  .chart { position: relative; border: 1px solid var(--line); border-radius: 6px; padding: 8px 8px 4px; }
+  .chart h3 { font-size: 13px; margin: 0 0 4px; }
+  .chart svg { display: block; width: 100%; overflow: visible; }
+  .chart .axis text { font: 11px Helvetica, Arial, sans-serif; fill: var(--muted); }
+  .chart .gridline { stroke: var(--grid); stroke-width: 1; }
+  .chart .line { fill: none; stroke: var(--series); stroke-width: 2; stroke-linejoin: round; }
+  .chart .pt { fill: var(--series); stroke: var(--surface); stroke-width: 2; }
+  .chart .pt.br { fill: var(--surface); stroke: var(--series); }
+  .chart .pt.on { r: 6; }
+  .chart .sel { stroke: #1b2733; stroke-width: 1; stroke-dasharray: 3,3; }
+  .chart .hair { stroke: var(--muted); stroke-width: 1; visibility: hidden; }
+  .chart .end { font: bold 11px Helvetica, Arial, sans-serif; fill: #1b2733; }
+  .chart .hit { fill: transparent; cursor: pointer; }
+  .tip { position: absolute; pointer-events: none; background: #1b2733; color: #fff; font-size: 12px;
+         padding: 4px 8px; border-radius: 4px; white-space: nowrap; display: none; z-index: 2; }
+  .tip .x { color: #c9d3de; font-size: 11px; }
+  table.mt { border-collapse: collapse; margin-top: 16px; font-size: 12px; }
+  table.mt th, table.mt td { border-bottom: 1px solid #eef1f4; padding: 3px 8px; text-align: right; }
+  table.mt th:first-child, table.mt td:first-child, table.mt td.path { text-align: left; }
+  table.mt tbody tr { cursor: pointer; } table.mt tbody tr:hover { background: #f3f6f9; }
+  table.mt tbody tr.on { background: #e3ecf7; }
+  table.mt td.path { font-family: monospace; color: var(--muted); }
+  #hovertip { position: fixed; z-index: 20; max-width: 460px; background: #1b2733; color: #f3f6f9; padding: 8px 10px;
+              border-radius: 6px; font-size: 12px; line-height: 1.45; pointer-events: none; display: none;
+              box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+  #hovertip h4 { margin: 0 0 4px; font-size: 13px; }
+  #hovertip .p { color: #a9b6c4; font-family: monospace; font-size: 11px; }
+  #hovertip .tf { margin-top: 7px; }
+  #hovertip .tf .p { color: #ffd479; }
+  #hovertip .miss { color: #a9b6c4; font-style: italic; }
+  #hovertip .pr { color: #c9b3e3; font-size: 11px; margin-top: 2px; }
+  .fnote { font: 12px/1.4 Helvetica, Arial, sans-serif; color: var(--muted); padding: 0 4px 6px 24px; }
+  #search { position: sticky; top: 0; z-index: 1; background: #f6f8fa; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  #search input { width: 100%; font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 4px; }
+  #qcount { color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .f.qhit { box-shadow: inset 3px 0 0 #e8c766; }
+  mark { background: #ffe58a; color: inherit; padding: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title"></h1>
+  <div class="tabs" id="tabs"></div>
+  <div class="legend"><span style="background:var(--add)"></span>added <span style="background:var(--mod)"></span>modified <span style="background:var(--del)"></span>deleted</div>
+  <div class="zoom"><button id="prview" title="PR view: one card per pull request, its commits folded in; diff, notes and summary cover the whole PR. Off lists the commits inside each PR.">PR view: off</button><button id="diffmode" title="Diff mode: outline what the picked commit changed and fade the rest. Off shows the plain diagram.">Diff: on</button><button id="zout">-</button><button id="zfit">fit</button><button id="zin">+</button></div>
+</header>
+<nav id="commits">
+  <div id="search"><input id="q" type="search" placeholder="Search messages, files, diffs ( / )" autocomplete="off">
+    <div id="qcount"></div></div>
+  <div id="commitlist"></div>
+</nav>
+<main id="stage"></main>
+<div id="grip" title="Drag to resize the side panel; double click to reset"></div>
+<aside id="detail"></aside>
+<div id="hovertip" role="tooltip"></div>
+<script>
+const DATA = /*DATA*/null;
+const COLORS = { A: '#1e8e3e', M: '#d08700', D: '#c5221f' };
+const state = { diagram: 0, metrics: false, commit: null, node: null, file: null, scale: 1, diff: true, prView: false, terms: [] };
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// Index every commit (top level and brought in by merges) by sha; PARENT: inner commit -> its top level entry.
+const BY_SHA = {}, PARENT = {};
+// Inner commits carry no list of their own; give them an empty one so every entry has the same shape.
+for (const c of DATA.commits) { BY_SHA[c.sha] = c; for (const k of c.children) { BY_SHA[k.sha] = k; PARENT[k.sha] = c; k.children = []; } }
+
+// ---- PR view: one card per pull request. A PR whose inner commits are plain commits is
+// folded into one card (its diff already covers the whole PR); a release that merged
+// other PRs still lists them.
+const isPR = (c) => c.branch || Boolean(c.pr);
+const folded = (c) => state.prView && isPR(c) && c.children.length > 0 && !c.children.some((k) => k.pr);
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+const title = (c) => (state.prView && c.pr ? `PR #${c.pr.number}: ${c.pr.title}` : c.subject);
+
+function diagramName() { return DATA.diagrams[state.diagram].name; }
+
+// Boxes this commit touched on the current diagram: id -> {add, del, status}.
+function touched(c) {
+  const out = {};
+  for (const f of c.files) {
+    for (const id of f.boxes[diagramName()] || []) {
+      const t = out[id] || (out[id] = { add: 0, del: 0, st: new Set(), files: [] });
+      t.add += f.add; t.del += f.del; t.st.add(f.status); t.files.push(f);
+    }
+  }
+  for (const t of Object.values(out)) t.status = t.st.size === 1 ? [...t.st][0] : 'M';
+  return out;
+}
+
+function hitCount(c) {
+  return DATA.diagrams.map((d) => new Set(c.files.flatMap((f) => f.boxes[d.name] || [])).size);
+}
+
+// One entry per top level row, kept so the search can show, hide and open them.
+const ROWS = [];
+
+function renderCommits() {
+  const nav = $('commitlist');
+  nav.innerHTML = '';
+  ROWS.length = 0;
+  if (state.prView && DATA.prs_note) nav.insertAdjacentHTML('beforeend', `<div class="note">PR view: ${esc(DATA.prs_note)}.</div>`);
+  for (const c of DATA.commits) {
+    const entry = { c, row: commitRow(c, false), kids: null, kidRows: [], folded: folded(c) };
+    nav.appendChild(entry.row);
+    if (c.children.length && !entry.folded) {
+      const kids = document.createElement('div');
+      kids.className = 'kids'; kids.id = 'kids-' + c.sha;
+      if (c.children_note) kids.insertAdjacentHTML('beforeend', `<div class="note">${esc(c.children_note)}</div>`);
+      for (const k of c.children) { const r = commitRow(k, true); entry.kidRows.push({ c: k, row: r }); kids.appendChild(r); }
+      nav.appendChild(kids);
+      entry.kids = kids;
+    }
+    ROWS.push(entry);
+  }
+}
+
+// ---- Keyword search over messages, authors, shas, file paths, file notes and diff text.
+const HAY = {};
+for (const c of Object.values(BY_SHA)) {
+  HAY[c.sha] = [c.subject, c.body, c.author, c.short, c.sha, c.patch_note, c.pr?.title, c.pr?.body,
+    ...c.files.flatMap((f) => [f.path, f.note, f.patch])].join('\n').toLowerCase();
+}
+const fileHay = (f) => [f.path, f.note, f.patch].join('\n').toLowerCase();
+const hasAll = (text, terms) => terms.every((t) => text.includes(t));
+const matches = (c) => hasAll(HAY[c.sha], state.terms);
+
+function setKidsOpen(entry, open) {
+  entry.kids.classList.toggle('open', open);
+  const t = entry.row.querySelector('.toggle');
+  if (t) t.textContent = t.textContent.replace(open ? '(show)' : '(hide)', open ? '(hide)' : '(show)');
+}
+
+function applySearch() {
+  state.terms = $('q').value.toLowerCase().split(/\s+/).filter(Boolean);
+  const on = state.terms.length > 0;
+  let tops = 0, kids = 0;
+  for (const e of ROWS) {
+    const kidHits = e.kidRows.filter((k) => matches(k.c));
+    for (const k of e.kidRows) k.row.hidden = on && !kidHits.includes(k);
+    // A folded PR also matches on the messages and diffs of the commits folded into it.
+    const show = !on || matches(e.c) || kidHits.length > 0 || (e.folded && e.c.children.some(matches));
+    e.row.hidden = !show;
+    if (e.kids) { e.kids.hidden = !show; setKidsOpen(e, on && kidHits.length > 0); }
+    if (show) tops++;
+    kids += kidHits.length;
+  }
+  $('qcount').textContent = on ? `${tops} of ${ROWS.length} rows match` + (kids ? `, ${kids} commit${kids === 1 ? '' : 's'} inside them` : '') : '';
+  renderDetail();
+}
+
+function markLine(line) {
+  if (!state.terms.length) return esc(line);
+  const re = new RegExp('(' + state.terms.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')', 'gi');
+  return line.split(re).map((part, i) => (i % 2 ? `<mark>${esc(part)}</mark>` : esc(part))).join('');
+}
+
+function firstVisibleRow() {
+  return [...document.querySelectorAll('#commitlist .c')].find((r) => r.offsetParent !== null);
+}
+
+$('q').addEventListener('input', applySearch);
+$('q').addEventListener('keydown', (ev) => {
+  if (ev.key === 'Enter') { const r = firstVisibleRow(); if (r) { selectCommit(r.dataset.sha); r.scrollIntoView({ block: 'nearest' }); } }
+  if (ev.key === 'Escape') { $('q').value = ''; applySearch(); $('q').blur(); }
+});
+document.addEventListener('keydown', (ev) => {
+  if (ev.key === '/' && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) { ev.preventDefault(); $('q').focus(); }
+});
+
+function commitRow(c, isKid) {
+  const row = document.createElement('div');
+  row.className = c.branch ? 'c br' : 'c'; row.dataset.sha = c.sha;
+  row.tabIndex = 0; row.setAttribute('aria-describedby', 'hovertip');
+  const hits = hitCount(c).map((n, i) => `${n} on ${esc(DATA.diagrams[i].name)}`).join(', ');
+  const nPR = c.children.filter((k) => k.pr).length, nPlain = c.children.length - nPR;
+  const inside = state.prView && nPR ? plural(nPR, 'PR') + (nPlain ? ` and ${plural(nPlain, 'other commit')}` : '') : plural(c.children.length, 'commit');
+  const kids = isKid || !c.children.length ? ''
+    : folded(c) ? `<div class="folded">${plural(c.children.length, 'commit')} folded into this PR</div>`
+    : `<div class="toggle" data-kids="${c.sha}" tabindex="0" role="button">${inside} inside (show)</div>`;
+  const tag = c.branch ? '<span class="tag">NOT MERGED</span>' : '';
+  row.innerHTML = `<div>${tag}<b>${esc(title(c))}</b></div>
+    <div class="meta">${c.short} · ${esc(c.date)} · ${esc(c.author)} · ${c.files.length} files</div>
+    <div class="hits">boxes: ${hits}</div>${c.against_note ? `<div class="anote">Diff base: ${esc(c.against_note)}.</div>` : ''}${kids}`;
+  row.addEventListener('click', (ev) => {
+    const t = ev.target.closest('.toggle');
+    if (t) {
+      const k = $('kids-' + t.dataset.kids);
+      k.classList.toggle('open');
+      t.textContent = t.textContent.replace(k.classList.contains('open') ? '(show)' : '(hide)',
+                                            k.classList.contains('open') ? '(hide)' : '(show)');
+      ev.stopPropagation();
+    }
+    selectCommit(c.sha);
+  });
+  row.addEventListener('keydown', (ev) => {
+    if (ev.target.classList.contains('toggle') && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); ev.target.click(); return; }
+    if (ev.target !== row) return;
+    if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); selectCommit(c.sha); }
+    if (ev.key === 'Escape') hideTip();
+  });
+  // Summary tooltip on mouse hover and on keyboard focus, beside the card.
+  const show = () => showTip(cardTip(c), row);
+  row.addEventListener('mouseenter', show); row.addEventListener('focus', show);
+  row.addEventListener('mouseleave', hideTip); row.addEventListener('blur', hideTip);
+  return row;
+}
+
+// Hover text for a card in the list: what the commit or branch does and why (written at build time).
+function cardTip(c) {
+  const kind = c.branch ? 'Branch not merged' : c.pr ? 'Merged pull request' : c.merge ? 'Merge commit' : 'Commit';
+  const pr = (c.pr ? `<div class="pr">PR #${c.pr.number}: ${esc(c.pr.title)}</div>` : '')
+    + (c.pr_error ? `<div class="pr miss">${esc(c.pr_error)}</div>` : '')
+    + (folded(c) ? `<div class="pr">${plural(c.children.length, 'commit')} folded in; the summary covers the whole PR.</div>` : '');
+  const sum = c.summary ? esc(c.summary)
+    : `<span class="miss">No summary: ${esc(c.summary_error || 'none was written for this entry.')}</span>`;
+  const prErr = c.against_note ? `<div class="tf miss">Diff base: ${esc(c.against_note)}.</div>` : '';
+  return `<h4>${esc(title(c))}</h4><div class="p">${kind}, ${c.short}, ${esc(c.date)}, ${esc(c.author)}</div>${pr}`
+    + `<div class="tf">${sum}</div>${prErr}`;
+}
+
+function renderTabs() {
+  $('tabs').innerHTML = DATA.diagrams.map((d, i) =>
+    `<button data-i="${i}" class="${!state.metrics && i === state.diagram ? 'on' : ''}">${esc(d.name)}</button>`).join('')
+    + `<button data-i="metrics" class="${state.metrics ? 'on' : ''}">Code metrics</button>`;
+  $('tabs').querySelectorAll('button').forEach((b) => b.onclick = () => {
+    state.metrics = b.dataset.i === 'metrics';
+    if (!state.metrics) state.diagram = +b.dataset.i;
+    state.node = null; renderTabs(); renderDiagram(true); paint(); renderDetail();
+  });
+}
+
+function renderDiagram(fit) {
+  document.body.classList.toggle('metrics', state.metrics);
+  if (state.metrics) { renderMetrics(); return; }
+  $('stage').innerHTML = DATA.diagrams[state.diagram].svg;
+  const svg = $('stage').querySelector('svg');
+  svg.dataset.w = svg.getAttribute('width'); svg.dataset.h = svg.getAttribute('height');
+  svg.querySelectorAll('g.node title').forEach((t) => t.remove());
+  svg.querySelectorAll('g.node').forEach((g) => {
+    g.addEventListener('mouseenter', (ev) => showTip(boxTip(g.dataset.id), ev));
+    g.addEventListener('mousemove', (ev) => placeTip(ev));
+    g.addEventListener('mouseleave', hideTip);
+  });
+  // Clicking a box picks it; the GitHub link moves to the detail panel.
+  svg.querySelectorAll('g.node').forEach((g) => g.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    state.node = state.node === g.dataset.id ? null : g.dataset.id; state.file = null;
+    paint(); renderDetail();
+  }));
+  if (fit) zoomFit(); else applyZoom();
+}
+
+// Why a file has no change note: the build's error for this commit, if any.
+const noteMissing = (c) => c.notes_error ? `No change note: ${c.notes_error}` : 'No change note for this file.';
+
+// Hover text for a box. Diff mode with a picked commit that touched the box: what changed
+// in each of its files and why. Otherwise: what the box is for.
+function boxTip(id) {
+  const nodes = DATA.diagrams[state.diagram].nodes, n = nodes[id];
+  const lbl = (x) => esc(x.lbl.replace(/\n/g, ' '));
+  const c = state.diff ? BY_SHA[state.commit] : null;
+  const t = c ? touched(c)[id] : null;
+  if (t) {
+    return `<h4>${lbl(n)}: changed in this ${c.branch ? 'PR' : 'commit'}</h4>` + t.files.map((f) =>
+      `<div class="tf"><div class="p">${esc(f.path)} (${f.status}, +${f.add} -${f.del})</div>`
+      + (f.note ? esc(f.note) : `<span class="miss">${esc(noteMissing(c))}</span>`) + '</div>').join('');
+  }
+  const shared = n.proxy_of ? nodes[n.proxy_of] : null;
+  const what = shared ? `${esc(shared.desc)}<div class="tf">Here: ${esc(n.desc.replace(/^Proxy for [^:]*:\s*/, ''))}</div>`
+    : esc(n.desc) || '<span class="miss">No description.</span>';
+  return `<h4>${lbl(shared || n)}</h4>${n.file ? `<div class="p">${esc(n.file)}</div>` : ''}<div class="tf">${what}</div>`;
+}
+
+// The one hover box of the page. `at` is a mouse event (box follows the pointer) or an
+// element (box sits to its right, top aligned, as for a focused card).
+function showTip(html, at) {
+  const tip = $('hovertip');
+  tip.innerHTML = html; tip.style.display = 'block';
+  placeTip(at);
+}
+function hideTip() { $('hovertip').style.display = 'none'; }
+$('commits').addEventListener('scroll', hideTip);  // a card's box would drift away from its card
+function placeTip(at) {
+  const tip = $('hovertip');
+  let x, y;
+  if (at instanceof Element) {
+    const r = at.getBoundingClientRect();
+    x = r.right + 8;
+    y = Math.min(r.top, window.innerHeight - tip.offsetHeight - 8);
+  } else {
+    x = Math.min(at.clientX + 14, window.innerWidth - tip.offsetWidth - 8);
+    y = at.clientY + 16 + tip.offsetHeight > window.innerHeight ? at.clientY - tip.offsetHeight - 10 : at.clientY + 16;
+  }
+  tip.style.left = `${Math.max(8, x)}px`; tip.style.top = `${Math.max(8, y)}px`;
+}
+
+function applyZoom() {
+  if (state.metrics) return;
+  const svg = $('stage').querySelector('svg');
+  svg.setAttribute('width', svg.dataset.w * state.scale);
+  svg.setAttribute('height', svg.dataset.h * state.scale);
+}
+function zoomFit() {
+  if (state.metrics) return;
+  const svg = $('stage').querySelector('svg');
+  state.scale = Math.min(1, ($('stage').clientWidth - 4) / svg.dataset.w);
+  applyZoom();
+}
+$('zin').onclick = () => { state.scale *= 1.25; applyZoom(); };
+$('zout').onclick = () => { state.scale /= 1.25; applyZoom(); };
+$('zfit').onclick = zoomFit;
+$('stage').addEventListener('wheel', (ev) => {
+  if (!ev.ctrlKey) return;
+  ev.preventDefault();
+  state.scale *= ev.deltaY < 0 ? 1.1 : 1 / 1.1;
+  applyZoom();
+}, { passive: false });
+
+// Outline touched boxes, fade the rest, badge each touched box with +/- counts.
+function paint() {
+  if (state.metrics) { markMetricsPick(); return; }
+  const svg = $('stage').querySelector('svg');
+  svg.querySelectorAll('.ring, .badge').forEach((e) => e.remove());
+  const c = state.diff ? BY_SHA[state.commit] : null;  // diff mode off: plain diagram
+  const hit = c ? touched(c) : {};
+  const any = c && Object.keys(hit).length > 0;
+  svg.querySelectorAll('g.node').forEach((g) => {
+    const t = hit[g.dataset.id];
+    g.classList.toggle('dim', Boolean(c) && !t && g.dataset.id !== state.node);
+    g.classList.toggle('hit', Boolean(t));
+    if (!t && g.dataset.id !== state.node) return;
+    const b = g.getBBox();
+    const color = t ? COLORS[t.status] : '#2f7dc4';
+    const ring = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    ring.setAttribute('class', 'ring');
+    ring.setAttribute('x', b.x - 6); ring.setAttribute('y', b.y - 6);
+    ring.setAttribute('width', b.width + 12); ring.setAttribute('height', b.height + 12);
+    ring.setAttribute('stroke', color);
+    if (g.dataset.id === state.node) ring.setAttribute('stroke-dasharray', '10,5');
+    svg.appendChild(ring);
+    if (t) {
+      const label = `+${t.add} -${t.del}`;
+      const badge = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      badge.setAttribute('class', 'badge');
+      const w = 9 * label.length + 8;
+      badge.innerHTML = `<rect x="${b.x + b.width - w + 6}" y="${b.y - 22}" width="${w}" height="18" fill="${color}"/>
+        <text x="${b.x + b.width - w + 10}" y="${b.y - 8}">${label}</text>`;
+      svg.appendChild(badge);
+    }
+  });
+  svg.querySelectorAll('g.edge').forEach((g) => {
+    g.classList.toggle('dim', Boolean(c) && !(hit[g.dataset.src] && hit[g.dataset.dst]));
+  });
+  if (any && !state.scrolled) {
+    // Bring the first touched box into view once per commit pick.
+    const first = svg.querySelector('g.node.hit');
+    if (first) first.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' });
+    state.scrolled = true;
+  }
+}
+
+function selectCommit(sha) {
+  state.commit = sha; state.node = null; state.file = null; state.scrolled = false;
+  document.querySelectorAll('.c').forEach((r) => r.classList.toggle('on', r.dataset.sha === sha));
+  paint(); renderDetail();
+}
+
+function fileRow(f) {
+  const on = (state.file === f.path ? ' on' : '') + (state.terms.length && hasAll(fileHay(f), state.terms) ? ' qhit' : '');
+  const n = f.binary ? 'binary' : `<span class="plus">+${f.add}</span> <span class="minus">-${f.del}</span>`;
+  return `<div class="f${on}" data-path="${esc(f.path)}"><span class="st ${f.status}">${f.status}</span>
+    <span>${esc(f.path)}</span><span class="n">${n}</span></div>${f.note ? `<div class="fnote">${esc(f.note)}</div>` : ''}`;
+}
+
+function patchHtml(f) {
+  if (!f.patch) return '<div class="note">No patch text for this file (binary).</div>';
+  return '<pre class="diff">' + f.patch.split('\n').map((l) => {
+    const cls = l.startsWith('+') && !l.startsWith('+++') ? 'a'
+      : l.startsWith('-') && !l.startsWith('---') ? 'd' : l.startsWith('@@') ? 'h' : '';
+    return `<div class="${cls}">${markLine(l) || ' '}</div>`;
+  }).join('') + '</pre>';
+}
+
+function bindFileRows(d) {
+  d.querySelectorAll('.f').forEach((r) => r.onclick = () => {
+    state.file = state.file === r.dataset.path ? null : r.dataset.path; renderDetail();
+    if (state.file) d.querySelector('pre.diff, .grp:last-child')?.scrollIntoView({ block: 'start' });
+  });
+}
+
+function renderDetail() {
+  const d = $('detail');
+  const c = BY_SHA[state.commit];
+  if (!c) {
+    d.innerHTML = `<h2>${esc(DATA.repo)}: latest ${DATA.commits.length} commits on ${esc(DATA.ref)}</h2>
+      <p>Pick a commit on the left. Boxes it changed are outlined, with lines added and removed.
+      Click a box to list only its files. Merge commits list the commits they brought in.</p>`;
+    return;
+  }
+  const name = diagramName();
+  const nodes = DATA.diagrams[state.diagram].nodes;
+  let files = c.files;
+  let head = `<h2>${esc(title(c))}</h2>
+    <div class="meta">${c.short} · ${esc(c.date)} · ${esc(c.author)}
+    ${c.url ? ` · <a href="${c.url}" target="_blank">GitHub</a>` : ''}
+    ${c.pr ? ` · <a href="${esc(c.pr.url)}" target="_blank">PR #${c.pr.number}</a>` : ''}</div>
+    ${folded(c) ? `<div class="meta">Whole PR: ${plural(c.children.length, 'commit')} folded in.</div>` : ''}
+    ${c.body ? `<pre class="body">${esc(c.body)}</pre>` : ''}
+    ${c.pr?.body ? `<details class="prbody"><summary>PR #${c.pr.number} description</summary><pre class="body">${esc(c.pr.body)}</pre></details>` : ''}
+    ${c.pr_error ? `<div class="note">${esc(c.pr_error)}</div>` : ''}
+    ${c.patch_note ? `<div class="note">${esc(c.patch_note)}</div>` : ''}
+    ${c.notes_error ? `<div class="note">${esc(noteMissing(c))}</div>` : ''}`;
+  if (state.metrics) {
+    const sel = c.files.find((f) => f.path === state.file);
+    d.innerHTML = head + metricsSummary(c)
+      + `<div class="grp"><h3>Files changed (${c.files.length})</h3>${c.files.map(fileRow).join('')}</div>`
+      + (sel ? `<div class="grp"><h3>Diff: ${esc(sel.path)}</h3>${patchHtml(sel)}</div>` : '');
+    bindFileRows(d);
+    return;
+  }
+  if (state.node) {
+    const n = nodes[state.node];
+    files = files.filter((f) => (f.boxes[name] || []).includes(state.node));
+    head += `<div class="grp"><h3>Box: ${esc(n.lbl.replace(/\n/g, ' '))}</h3>
+      <div class="meta">${esc(n.file || 'no file')} · <a href="#" id="clearnode">show all files</a></div></div>`;
+  }
+  const on = files.filter((f) => (f.boxes[name] || []).length);
+  const off = files.filter((f) => !(f.boxes[name] || []).length);
+  let body = '';
+  if (on.length) {
+    // Group files under the box that covers them; a ✳ chip's files sit under its shared node, once.
+    const groups = {};
+    for (const f of on) {
+      for (const id of new Set(f.boxes[name].map((b) => nodes[b].proxy_of || b))) (groups[id] = groups[id] || []).push(f);
+    }
+    for (const [id, fs] of Object.entries(groups)) {
+      body += `<div class="grp"><h3>${esc(nodes[id].lbl.replace(/\n/g, ' '))}</h3>${fs.map(fileRow).join('')}</div>`;
+    }
+  }
+  if (off.length) {
+    body += `<div class="grp"><h3>Not on this diagram (${off.length})</h3>${off.map(fileRow).join('')}</div>`;
+  }
+  if (!files.length) body += '<p>No files.</p>';
+  // A picked box with one changed file shows that file's diff without another click.
+  const sel = files.find((f) => f.path === state.file) || (state.node && files.length === 1 ? files[0] : null);
+  if (files.length && !sel) body += '<p class="meta">Click a file to see its diff.</p>';
+  d.innerHTML = head + body + (sel ? `<div class="grp"><h3>Diff: ${esc(sel.path)}</h3>${patchHtml(sel)}</div>` : '');
+  bindFileRows(d);
+  const clear = $('clearnode');
+  if (clear) clear.onclick = (ev) => { ev.preventDefault(); state.node = null; paint(); renderDetail(); };
+}
+
+// ---- Code metrics tab: one small line chart per measure, one point per listed entry.
+const METRICS = [
+  { key: 'ccn', title: 'Cyclomatic complexity, summed over all functions',
+    extra: (p) => `${p.functions.toLocaleString()} functions, ${p.ccn_avg} per function` },
+  { key: 'files', title: 'Number of code files' },
+  { key: 'loc', title: 'Lines of code' },
+  { key: 'avg', title: 'Average file length (lines)' },
+  { key: 'max', title: 'Longest file (lines)', extra: (p) => p.max_path },
+  { key: 'p90', title: 'Top 10% of files: 90th percentile length (lines)',
+    extra: (p) => `the ${p.top10_n} longest files average ${p.top10_avg.toLocaleString()} lines` },
+];
+const POINTS = DATA.metrics.points;
+const fmt = (v) => v.toLocaleString(undefined, { maximumFractionDigits: 1 });
+
+// Rounded axis ticks spanning [lo, hi].
+function niceTicks(lo, hi) {
+  if (lo === hi) { const pad = Math.max(1, Math.abs(lo) * 0.05); lo -= pad; hi += pad; }
+  const raw = (hi - lo) / 4, mag = 10 ** Math.floor(Math.log10(raw));
+  const step = [1, 2, 2.5, 5, 10].map((m) => m * mag).find((s) => s >= raw);
+  const ticks = [];
+  for (let t = Math.floor(lo / step) * step; t <= hi + step * 1e-9; t += step) ticks.push(+t.toFixed(10));
+  if (ticks[ticks.length - 1] < hi) ticks.push(ticks[ticks.length - 1] + step);
+  return ticks;
+}
+
+function chartSvg(m, width) {
+  const H = 200, L = 58, R = 34, T = 18, B = 36;
+  const pw = width - L - R, ph = H - T - B;
+  const vals = POINTS.map((p) => p[m.key]);
+  const ticks = niceTicks(Math.min(...vals), Math.max(...vals));
+  const y0 = ticks[0], y1 = ticks[ticks.length - 1];
+  const step = POINTS.length > 1 ? pw / (POINTS.length - 1) : 0;
+  const x = (i) => L + (POINTS.length > 1 ? i * step : pw / 2);
+  const y = (v) => T + ph - ((v - y0) / (y1 - y0)) * ph;
+  const every = Math.max(1, Math.ceil(POINTS.length / Math.max(1, Math.floor(pw / 56))));
+  const grid = ticks.map((t) => `<line class="gridline" x1="${L}" x2="${L + pw}" y1="${y(t)}" y2="${y(t)}"/>
+    <text x="${L - 6}" y="${y(t) + 4}" text-anchor="end">${fmt(t)}</text>`).join('');
+  const xl = POINTS.map((p, i) => i % every && i !== POINTS.length - 1 ? '' :
+    `<text x="${x(i)}" y="${T + ph + 15}" text-anchor="middle">${esc(p.label)}</text>
+     <text x="${x(i)}" y="${T + ph + 28}" text-anchor="middle">${esc(p.date.slice(5))}</text>`).join('');
+  const line = POINTS.map((p, i) => `${i ? 'L' : 'M'}${x(i)},${y(p[m.key])}`).join('');
+  const last = POINTS.length - 1;
+  const hw = POINTS.length > 1 ? step : pw;
+  return `<svg height="${H}" viewBox="0 0 ${width} ${H}" role="img" aria-label="${esc(m.title)}">
+    <g class="axis">${grid}${xl}</g>
+    <line class="sel" x1="0" x2="0" y1="${T}" y2="${T + ph}" visibility="hidden"/>
+    <line class="hair" x1="0" x2="0" y1="${T}" y2="${T + ph}"/>
+    <path class="line" d="${line}"/>
+    ${POINTS.map((p, i) => `<circle class="pt${p.branch ? ' br' : ''}" data-i="${i}" cx="${x(i)}" cy="${y(p[m.key])}" r="4"/>`).join('')}
+    <text class="end" x="${x(last)}" y="${y(POINTS[last][m.key]) - 9}" text-anchor="middle">${fmt(POINTS[last][m.key])}</text>
+    ${POINTS.map((p, i) => `<rect class="hit" data-i="${i}" x="${x(i) - hw / 2}" y="${T}" width="${hw}" height="${ph}"/>`).join('')}
+  </svg>`;
+}
+
+function renderMetrics() {
+  const M = DATA.metrics;
+  $('stage').innerHTML = `<div id="metrics">
+    <p class="intro">Code files: tracked files ending in ${M.exts.map(esc).join(', ')}, in the repo at each listed entry
+    (the merge commit, or the PR branch's latest commit), in order of commit date, oldest on the left. Lines: lines of code, without blank and
+    comment lines (lizard NLOC). Complexity: lizard's cyclomatic complexity, 1 per function plus 1 per branch.
+    Hollow points: PR not merged yet. Click a point or a table row to pick that entry.</p>
+    <div class="grid">${METRICS.map((m) => `<div class="chart" data-key="${m.key}"><h3>${esc(m.title)}</h3><div class="plot"></div><div class="tip"></div></div>`).join('')}</div>
+    <table class="mt"><thead><tr><th>Entry</th><th>Date</th><th>Files</th><th>Lines</th><th>Average</th><th>Longest</th><th>90th pct</th><th>Complexity</th><th>Longest file</th></tr></thead>
+    <tbody>${POINTS.map((p, i) => `<tr data-i="${i}"><td>${esc(p.label)}${p.branch ? ' (not merged)' : ''}</td><td>${esc(p.date)}</td>
+      <td>${fmt(p.files)}</td><td>${fmt(p.loc)}</td><td>${fmt(p.avg)}</td><td>${fmt(p.max)}</td><td>${fmt(p.p90)}</td>
+      <td>${fmt(p.ccn)}</td><td class="path">${esc(p.max_path)}</td></tr>`).join('')}</tbody></table></div>`;
+  const pick = (i) => selectCommit(POINTS[i].key);
+  $('stage').querySelectorAll('tbody tr').forEach((r) => r.onclick = () => pick(+r.dataset.i));
+  for (const card of $('stage').querySelectorAll('.chart')) {
+    const m = METRICS.find((k) => k.key === card.dataset.key);
+    card.querySelector('.plot').innerHTML = chartSvg(m, card.querySelector('.plot').clientWidth);
+    const tip = card.querySelector('.tip'), hair = card.querySelector('.hair');
+    card.querySelectorAll('.hit').forEach((h) => {
+      const i = +h.dataset.i, p = POINTS[i], pt = card.querySelector(`.pt[data-i="${i}"]`);
+      h.onmouseenter = () => {
+        hair.setAttribute('x1', pt.getAttribute('cx')); hair.setAttribute('x2', pt.getAttribute('cx'));
+        hair.style.visibility = 'visible';
+        tip.innerHTML = `<b>${fmt(p[m.key])}</b> &nbsp;${esc(p.label)} · ${esc(p.date)}${p.branch ? ' · not merged' : ''}<div>${esc(p.subject || '')}</div>
+          ${m.extra ? `<div class="x">${esc(m.extra(p))}</div>` : ''}`;
+        tip.style.display = 'block';
+        const box = card.clientWidth, cx = +pt.getAttribute('cx') + 8;
+        tip.style.left = `${Math.min(cx + 8, box - tip.offsetWidth - 4)}px`;
+        tip.style.top = `${+pt.getAttribute('cy') + 30 - tip.offsetHeight - 10}px`;
+      };
+      h.onmouseleave = () => { hair.style.visibility = 'hidden'; tip.style.display = 'none'; };
+      h.onclick = () => pick(i);
+    });
+  }
+  markMetricsPick();
+}
+
+// Mark the picked entry on every chart and in the table.
+function markMetricsPick() {
+  const i = POINTS.findIndex((p) => p.key === state.commit);
+  $('stage').querySelectorAll('.chart').forEach((card) => {
+    card.querySelectorAll('.pt').forEach((pt) => pt.classList.toggle('on', +pt.dataset.i === i));
+    const sel = card.querySelector('.sel'), pt = card.querySelector(`.pt[data-i="${i}"]`);
+    sel.setAttribute('visibility', pt ? 'visible' : 'hidden');
+    if (pt) { sel.setAttribute('x1', pt.getAttribute('cx')); sel.setAttribute('x2', pt.getAttribute('cx')); }
+  });
+  $('stage').querySelectorAll('tbody tr').forEach((r) => r.classList.toggle('on', +r.dataset.i === i));
+}
+
+function metricsSummary(c) {
+  const p = POINTS.find((q) => q.key === c.sha);
+  if (!p) return '<div class="note">No code metrics for this commit: metrics cover the listed entries only, not the commits inside a merge.</div>';
+  const rows = METRICS.map((m) => `<div class="f"><span>${esc(m.title)}</span><span class="n">${fmt(p[m.key])}</span></div>`).join('');
+  return `<div class="grp"><h3>Code metrics at this entry</h3>${rows}<div class="meta">Longest file: ${esc(p.max_path)}</div></div>`;
+}
+
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  if (!state.metrics) return;
+  clearTimeout(resizeTimer); resizeTimer = setTimeout(renderMetrics, 150);
+});
+
+$('title').textContent = `${DATA.repo} · ${DATA.ref}`;
+document.title = `Delta: ${DATA.repo}`;
+// Side panel width: drag the grip; remembered per browser when storage works.
+const DETAIL_KEY = 'delta-detail-width';
+function setDetailWidth(px) {
+  const w = Math.max(240, Math.min(px, window.innerWidth - 420));
+  document.body.style.setProperty('--detail-w', `${w}px`);
+  return w;
+}
+try { const saved = Number(localStorage.getItem(DETAIL_KEY)); if (saved) setDetailWidth(saved); } catch (e) {}
+$('grip').onpointerdown = (ev) => {
+  const grip = ev.currentTarget; grip.setPointerCapture(ev.pointerId);
+  grip.classList.add('drag'); document.body.classList.add('resizing');
+  let w = null;
+  grip.onpointermove = (m) => { w = setDetailWidth(window.innerWidth - m.clientX); };
+  grip.onpointerup = () => {
+    grip.onpointermove = grip.onpointerup = null;
+    grip.classList.remove('drag'); document.body.classList.remove('resizing');
+    if (w) try { localStorage.setItem(DETAIL_KEY, String(w)); } catch (e) {}
+  };
+};
+$('grip').ondblclick = () => {
+  document.body.style.removeProperty('--detail-w');
+  try { localStorage.removeItem(DETAIL_KEY); } catch (e) {}
+};
+
+// Diff mode toggle; remembered per browser when storage works.
+const DIFF_KEY = 'delta-diff-mode';
+function setDiffMode(on) {
+  state.diff = on;
+  $('diffmode').textContent = on ? 'Diff: on' : 'Diff: off';
+  $('diffmode').classList.toggle('on', on);
+  try { localStorage.setItem(DIFF_KEY, on ? '1' : '0'); } catch (e) {}
+}
+try { if (localStorage.getItem(DIFF_KEY) === '0') state.diff = false; } catch (e) {}
+setDiffMode(state.diff);
+$('diffmode').onclick = () => { setDiffMode(!state.diff); paint(); };
+
+// PR view toggle; remembered per browser when storage works. A picked commit that gets
+// folded into its PR hands the pick to that PR.
+const PR_KEY = 'delta-pr-view';
+function setPrView(on) {
+  state.prView = on;
+  $('prview').textContent = on ? 'PR view: on' : 'PR view: off';
+  $('prview').classList.toggle('on', on);
+  try { localStorage.setItem(PR_KEY, on ? '1' : '0'); } catch (e) {}
+}
+try { if (localStorage.getItem(PR_KEY) === '1') state.prView = true; } catch (e) {}
+setPrView(state.prView);
+$('prview').onclick = () => {
+  setPrView(!state.prView);
+  renderCommits(); applySearch();
+  const top = PARENT[state.commit];
+  selectCommit(top && folded(top) ? top.sha : state.commit);
+};
+
+// Right-click a box or a file row: open the local file through a u-open: link
+// (handler on the machine, see delta_viewer.py).
+const localLink = (path) => 'u-open:' + encodeURIComponent(`${DATA.root}/${path.replace(/\/$/, '')}`);
+function openLocal(path) {
+  if (!path) return false;
+  window.location.href = localLink(path);
+  return true;
+}
+document.addEventListener('contextmenu', (ev) => {
+  const row = ev.target.closest('#detail .f');
+  const box = ev.target.closest('#stage g.node');
+  const path = row ? row.dataset.path : box ? DATA.diagrams[state.diagram].nodes[box.dataset.id]?.file : null;
+  if (openLocal(path)) ev.preventDefault();
+});
+
+renderTabs(); renderCommits(); applySearch(); renderDiagram(true); renderDetail();
+selectCommit(DATA.commits[0].sha);
+</script>
+</body>
+</html>

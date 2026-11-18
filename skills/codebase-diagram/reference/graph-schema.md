@@ -52,6 +52,7 @@ One file, three keys: `config`, `nodes`, `edges`.
 | `robot` | no | `true` prefixes 🤖, meaning this step calls an LLM |
 | `link` | no | explicit URL, overriding the derived one |
 | `w` / `h` | no | explicit pixel size, overriding label-driven sizing |
+| `proxy_of` | for `proxy` only, required | id of the node this chip copies; the chip takes its `file` and link |
 
 ### node types
 
@@ -62,7 +63,7 @@ One file, three keys: `config`, `nodes`, `edges`.
 | `ext` | blue pill, for a third-party service or model artifact |
 | `danger` | red pill, for a step with a security consequence |
 | `note` | yellow note, for an annotation with no traffic through it |
-| `proxy` | small dashed box, for a repeat of a node drawn elsewhere |
+| `proxy` | small dashed box, for a repeat of a node drawn elsewhere: a `<name> ✳` chip beside each user of a shared node (SKILL.md, ✳ proxy convention) |
 
 ## edges
 

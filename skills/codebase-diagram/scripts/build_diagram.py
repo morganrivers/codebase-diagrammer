@@ -83,6 +83,11 @@ def edge_style(spec):
     return out
 
 
+def effective_file(node, by_id):
+    """The file a node stands for: a ✳ proxy chip stands for the node it copies."""
+    return by_id[node['proxy_of']].get('file', '') if node.get('proxy_of') else node.get('file', '')
+
+
 def git(root, *args):
     """Run a read-only git command in `root`; '' when git or the repo is absent."""
     assert args, 'no git subcommand given'
@@ -190,6 +195,22 @@ class Diagram:
         assert self.band_keys or not self.nodes, 'config.bands is required'
 
     # ---------- validation --------------------------------------------------
+    def validate_proxies(self, by_id):
+        """A ✳ chip names the shared node it copies in `proxy_of`, and has no file of its own."""
+        for n in self.nodes:
+            is_proxy = n.get('type') == 'proxy'
+            if is_proxy and not n.get('proxy_of'):
+                fail(f'node {n["id"]}: a proxy chip needs proxy_of, the id of the node it copies')
+            if n.get('proxy_of') and not is_proxy:
+                fail(f'node {n["id"]}: proxy_of is only for type "proxy"')
+            if not is_proxy:
+                continue
+            target = by_id.get(n['proxy_of'])
+            if target is None or target.get('type') == 'proxy':
+                fail(f'node {n["id"]}: proxy_of {n["proxy_of"]!r} must be the id of a non-proxy node')
+            if n.get('file'):
+                fail(f'node {n["id"]}: a proxy chip takes its file from proxy_of; remove its own file')
+
     def validate(self):
         """Every check that catches an authoring mistake before dot runs."""
         ids = [n['id'] for n in self.nodes]
@@ -197,6 +218,7 @@ class Diagram:
         if dupes:
             fail(f'duplicate node ids: {sorted(dupes)}')
         known = set(ids)
+        self.validate_proxies({n['id']: n for n in self.nodes})
         allowed_grp = set(self.band_keys) | {'ext'}
         for n in self.nodes:
             if n.get('type', 'script') not in NODE_TYPES:
@@ -221,9 +243,10 @@ class Diagram:
     # ---------- preparation -------------------------------------------------
     def apply_links(self):
         """Fill in node and edge links; an explicit `link` in the JSON wins."""
+        by_id = {n['id']: n for n in self.nodes}
         for n in self.nodes:
             if not n.get('link'):
-                n['link'] = self.links.node(n.get('file', '')) or None
+                n['link'] = self.links.node(effective_file(n, by_id)) or None
         for e in self.edges:
             if not e.get('link'):
                 e['link'] = self.links.label(e.get('label', '')) or None
