@@ -43,6 +43,9 @@ or just ask Claude to diagram how the repo fits together.
 | Graphviz `dot` | layout |
 | `defusedxml` | reading `.drawio` |
 | `cairosvg`, or `rsvg-convert` / `inkscape` / `convert` | PNG only; SVG works without one |
+| `lizard` | delta viewer, code metrics tab |
+| `gh` CLI, logged in | delta viewer, PR titles and descriptions |
+| `claude` CLI (Claude Code login) | delta viewer, change notes and summaries; `--no-notes` skips them |
 
 ```
 python3 skills/codebase-diagram/scripts/check_deps.py
@@ -75,6 +78,45 @@ weighted so it fixes vertical order without dragging every band into a column.
 Edges that run backwards against the band order, and external services feeding
 several bands at once, are drawn but not allowed to set rank, so one return
 arrow cannot invert the page.
+
+A node that many boxes use (a secrets loader, an API client) is drawn once and
+marked ✳. Each user gets a small chip beside it instead of a long arrow back to
+the shared node. `SKILL.md` describes the convention.
+
+## Delta viewer: commits and PRs on the diagram
+
+`delta_viewer.py` writes one self-contained HTML page that shows what recent
+commits and pull requests changed, drawn on the built diagrams.
+
+```
+git fetch
+python3 skills/codebase-diagram/scripts/delta_viewer.py docs/diagram/<name>.json \
+    --ref origin/main -n 5 [--pr N ...] [--branch origin/<branch> ...] [--draft-prs] [--no-notes]
+```
+
+- The left list shows the last `-n` commits of `--ref`, plus any PRs and
+  branches you name.
+- A header toggle switches to one card per PR, with its commits folded in.
+- On the diagram, boxes whose files changed are outlined green (added), amber
+  (modified) or red (deleted), with line counts. The other boxes fade.
+- The right panel shows the message, the PR description, and each file's diff,
+  grouped by box. Files that no box covers are listed too.
+- A metrics tab shows complexity, file count and lines of code per entry.
+
+Unless you pass `--no-notes`, `change_notes.py` asks `claude -p` for a note per
+changed file and a short summary per card. This uses your Claude Code login and
+costs tokens. Results are cached in `delta_notes.json` and
+`delta_summaries.json` next to the page, so a rebuild only asks about new
+commits.
+
+## Other scripts
+
+- `check_edges.py docs/diagram/<name>.json [--ref origin/main]` compares the
+  arrows with the repo's import graph. It lists imports that have no arrow, and
+  arrows between code boxes that have no import.
+- `status_page.py <name>_status.json` writes an HTML page that shows where a
+  piece of work stands: workstreams, item states, tables and links. The JSON
+  format is in the script's docstring.
 
 ## License
 
