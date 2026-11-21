@@ -17,7 +17,7 @@ body, per file notes and diff, shown when the mouse or keyboard focus is on its
 card in the list. A merged PR's summary covers its whole diff (merge commit
 against its first parent), so the page's PR view shows it for the PR.
 """
-import hashlib, json, os, re, subprocess, sys
+import functools, hashlib, json, os, re, subprocess, sys
 from concurrent.futures import ThreadPoolExecutor
 
 MODEL = 'claude-opus-5-5'
@@ -38,6 +38,7 @@ SYSTEM = ('You write short notes for a code review page. For each changed file y
 CLAUDE_LOGIN_ENV = {k: v for k, v in os.environ.items() if k not in ('ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN')}
 
 
+@functools.cache
 def newest_claude():
     """The newest `claude` on PATH. `micromamba run -n py311` puts the env's own, older
     Claude Code first, and that one refuses newer models."""
@@ -68,7 +69,11 @@ def ask_claude(claude, system, prompt, cwd):
         [claude, '-p', '--model', MODEL, '--system-prompt', system, '--no-session-persistence',
          '--output-format', 'json', '--disallowedTools', 'Bash Edit Write Read Grep Glob WebFetch WebSearch Agent'],
         input=prompt, capture_output=True, text=True, timeout=600, cwd=cwd, env=CLAUDE_LOGIN_ENV)
-    out = json.loads(r.stdout)
+    try:
+        out = json.loads(r.stdout)
+    except json.JSONDecodeError:
+        raise RuntimeError(f'claude exited {r.returncode} without JSON: '
+                           f'{(r.stderr or r.stdout).strip()[:300] or "(no output)"}')
     if out.get('is_error'):
         raise RuntimeError(out.get('result'))
     text = out['result']

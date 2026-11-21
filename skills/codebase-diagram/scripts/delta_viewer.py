@@ -44,7 +44,7 @@ must describe the same repo. The script only reads git; run `git fetch` first
 if --ref is a remote branch.
 """
 import argparse, json, os, re, sys
-from build_diagram import git, fail, RepoLinks, effective_file
+from build_diagram import git, git_probe, fail, RepoLinks, effective_file, covers
 from drawio_to_png import load_model, collect, render_svg
 from code_metrics import CodeMetrics, CODE_EXTS
 from change_notes import ChangeNotes, CommitSummaries
@@ -75,11 +75,11 @@ class DiagramView:
         self.nodes = {n['id']: {'lbl': n['lbl'], 'file': files[n['id']], 'proxy_of': n.get('proxy_of'),
                                'desc': n.get('desc', '')}
                       for n in graph['nodes']}
-        self.paths = [(f.rstrip('/'), nid) for nid, f in files.items() if f]
+        self.paths = [(f, nid) for nid, f in files.items() if f]
 
     def boxes_for(self, path):
         """Ids of boxes whose file is this path, or a directory containing it."""
-        return [nid for f, nid in self.paths if path == f or path.startswith(f + '/')]
+        return [nid for f, nid in self.paths if covers(f, path)]
 
 
 class Commit:
@@ -87,9 +87,9 @@ class Commit:
 
     def __init__(self, root, sha, base=None):
         fmt = '%H%x00%P%x00%an%x00%ad%x00%s%x00%b'
+        if not git_probe(root, 'rev-parse', '--verify', '-q', f'{sha}^{{commit}}'):
+            fail(f'commit {sha!r} not found in {root}; run git fetch first')
         out = git(root, 'show', '-s', f'--format={fmt}', '--date=short', sha)
-        if not out:
-            fail(f'commit {sha!r} not found in {root}')
         full, parents, self.author, self.date, self.subject, self.body = out.split('\x00', 5)
         self.sha = full
         self.key = full
@@ -102,10 +102,9 @@ class Commit:
         self.patch_note = self._patches(root)
 
     def _files(self, root):
-        status = {}
-        for line in git(root, 'diff', '--no-renames', '--name-status', self.base, self.sha).splitlines():
-            code, path = line.split('\t', 1)
-            status[path] = code[0]
+        # -z on both: without it git quotes unusual paths, and the two lists would not match.
+        fields = git(root, 'diff', '--no-renames', '--name-status', '-z', self.base, self.sha).split('\0')
+        status = {path: code[0] for code, path in zip(fields[0::2], fields[1::2])}
         files = []
         for rec in git(root, 'diff', '--no-renames', '--numstat', '-z', self.base, self.sha).split('\0'):
             if not rec:
@@ -115,7 +114,7 @@ class Commit:
                           'add': int(add) if add != '-' else 0,
                           'del': int(dele) if dele != '-' else 0,
                           'binary': add == '-', 'patch': ''})
-        assert len(files) == len(status), f'{self.sha[:7]}: numstat and name-status disagree'
+        assert {f['path'] for f in files} == set(status), f'{self.sha[:7]}: numstat and name-status disagree'
         return files
 
     def _patches(self, root):
@@ -175,10 +174,10 @@ class BranchDelta(Commit):
     merge base with `against`, listed with the commits it holds."""
 
     def __init__(self, root, ref, against, title='', url='', pr=None, against_note=''):
-        tip = git(root, 'rev-parse', '--verify', '-q', f'{ref}^{{commit}}').strip()
+        tip = git_probe(root, 'rev-parse', '--verify', '-q', f'{ref}^{{commit}}')
         if not tip:
             fail(f'branch {ref!r} not found in {root}; run git fetch first')
-        base = git(root, 'merge-base', against, tip).strip()
+        base = git_probe(root, 'merge-base', against, tip)
         if not base:
             fail(f'{ref!r} has no merge base with {against!r}')
         super().__init__(root, tip, base=base)
@@ -194,7 +193,7 @@ class BranchDelta(Commit):
         return f'{self.base}..{self.sha}'
 
 
-PR_FIELDS = 'number,title,headRefName,baseRefName,url,isDraft,body,state'
+PR_FIELDS = 'number,title,headRefName,baseRefName,url,isDraft,body,state,mergeCommit'
 GH_TRIES = 3   # the GitHub API sometimes drops a call (unexpected EOF)
 
 
@@ -218,7 +217,7 @@ def merged_prs(root):
     merged PRs without their PR text and says why."""
     try:
         prs = gh_json(root, 'pr', 'list', '--state', 'merged', '--limit', str(MERGED_PR_LIMIT),
-                      '--json', PR_FIELDS + ',mergeCommit')
+                      '--json', PR_FIELDS)
     except RuntimeError as e:
         print(f'warning: merged PRs not read: {e}', file=sys.stderr)
         return {}, f'merged PRs not read from GitHub ({e})'
@@ -232,7 +231,7 @@ def attach_prs(commits, by_merge, why):
     for c in commits:
         if isinstance(c, BranchDelta):
             continue
-        c.pr = by_merge.get(c.sha)
+        c.pr = c.pr or by_merge.get(c.sha)  # a PR listed with --pr already has its fields
         m = MERGE_SUBJECT.match(c.subject)
         if m and not c.pr:
             c.pr_error = f'PR #{m.group(1)} text not read: {why or "gh did not return it as merged"}'
@@ -266,9 +265,12 @@ def branch_delta(root, ref, default_against, pr=None, title='', url=''):
         except RuntimeError as e:
             note = f'PR not read ({e})'
     against = f'{remote}/{pr["baseRefName"]}' if pr else default_against
-    if pr and not git(root, 'rev-parse', '--verify', '-q', f'{against}^{{commit}}').strip():
+    if pr and not git_probe(root, 'rev-parse', '--verify', '-q', f'{against}^{{commit}}'):
         note = f'base branch {against} of PR #{pr["number"]} not found (run git fetch)'
         against = default_against
+    if pr and pr['state'] == 'MERGED':
+        print(f'warning: {ref}: PR #{pr["number"]} is merged, so the branch shows no change against '
+              f'{against}; list it with --pr {pr["number"]} to see its merge commit', file=sys.stderr)
     if note:
         note = f'{note}, so diffed against {default_against}'
         print(f'warning: {ref}: {note}', file=sys.stderr)
@@ -276,7 +278,14 @@ def branch_delta(root, ref, default_against, pr=None, title='', url=''):
 
 
 def pr_delta(root, p, default_against):
-    """A PR listed by number or as a draft: titled with the PR, linked to it."""
+    """A PR listed by number or as a draft: titled with the PR, linked to it. A merged PR is
+    its merge (or squash) commit: its branch no longer differs from the base it merged into."""
+    if p['state'] == 'MERGED':
+        if not p.get('mergeCommit'):
+            fail(f'PR #{p["number"]} is merged but gh gives no merge commit')
+        c = Commit(root, p['mergeCommit']['oid'])
+        c.pr, c.url = p, p['url']
+        return c
     kind = 'Draft PR' if p['isDraft'] else 'PR'
     return branch_delta(root, f'origin/{p["headRefName"]}', default_against, pr=p,
                         title=f'{kind} #{p["number"]}: {p["title"]}', url=p['url'])
@@ -345,7 +354,11 @@ def main():
     if a.draft_prs:
         branches += [pr_delta(root, p, a.against) for p in
                      gh_or_fail(root, 'pr', 'list', '--draft', '--state', 'open', '--json', PR_FIELDS)]
-    tops = branches + first_parent_commits(root, a.ref, a.n)
+    # A merged --pr can also be one of the latest commits: list it once.
+    tops = []
+    for c in branches + first_parent_commits(root, a.ref, a.n):
+        if c.key not in {t.key for t in tops}:
+            tops.append(c)
     kids = {c.key: c.children(root) for c in tops}
     everything = tops + [k for c in tops for k in kids[c.key][0]]
     by_merge, prs_note = merged_prs(root)
@@ -369,7 +382,8 @@ def main():
     payload = json.dumps(data).replace('</', '<\\/')
     open(out, 'w', encoding='utf-8').write(template.replace('/*DATA*/null', payload))
     n_kids = sum(len(c['children']) for c in commits)
-    print(f'{out}: {len(branches)} branch(es), {len(commits) - len(branches)} commits '
+    n_branches = sum(isinstance(c, BranchDelta) for c in tops)
+    print(f'{out}: {n_branches} branch(es), {len(commits) - n_branches} commits '
           f'({n_kids} listed inside), {len(views)} diagram(s)')
 
 

@@ -88,13 +88,35 @@ def effective_file(node, by_id):
     return by_id[node['proxy_of']].get('file', '') if node.get('proxy_of') else node.get('file', '')
 
 
-def git(root, *args):
-    """Run a read-only git command in `root`; '' when git or the repo is absent."""
+def covers(box_path, path):
+    """Whether a box whose `file` is box_path stands for the repo file `path`: the same
+    file, or a directory holding it. The one rule for matching changed or imported files to boxes."""
+    box_path = box_path.rstrip('/')
+    assert box_path, 'a box with no file covers nothing'
+    return path == box_path or path.startswith(box_path + '/')
+
+
+def _run_git(root, args):
     assert args, 'no git subcommand given'
     try:
-        r = subprocess.run(['git', '-C', root, *args], capture_output=True, text=True)
+        return subprocess.run(['git', '-C', root, *args], capture_output=True, text=True)
     except FileNotFoundError:
-        return ''
+        raise SystemExit('git error: git is not installed or not on PATH')
+
+
+def git(root, *args):
+    """Output of a read-only git command in `root`. Stops with git's own message on failure,
+    so a bad ref or a missing repo is never read as 'no commits' or 'no files'."""
+    r = _run_git(root, args)
+    if r.returncode != 0:
+        raise SystemExit(f'git error: git -C {root} {" ".join(args)}: {r.stderr.strip()[:500]}')
+    return r.stdout.strip()
+
+
+def git_probe(root, *args):
+    """Output of a git command whose failure is an expected answer (a ref that may not
+    exist, a repo with no origin); '' on failure. Callers decide whether '' needs a warning."""
+    r = _run_git(root, args)
     return r.stdout.strip() if r.returncode == 0 else ''
 
 
@@ -116,21 +138,36 @@ class RepoLinks:
         if self.mode not in ('tracked', 'trust'):
             fail(f'github.link_mode {self.mode!r} must be "tracked" or "trust"')
         self.root = os.path.abspath(os.path.join(json_dir, gh['root'])) if gh.get('root') \
-            else (git(json_dir, 'rev-parse', '--show-toplevel') or json_dir)
-        self.base = gh.get('base') or self._remote_base()
-        self.branch = gh.get('branch') or git(self.root, 'rev-parse', '--abbrev-ref', 'HEAD') or 'main'
-        listing = git(self.root, 'ls-files') if self.mode == 'tracked' else ''
-        self.tracked = set(listing.split('\n')) if listing else set()
+            else (git_probe(json_dir, 'rev-parse', '--show-toplevel') or json_dir)
+        in_repo = bool(git_probe(self.root, 'rev-parse', '--git-dir'))
+        self.base = gh.get('base') or (self._remote_base() if in_repo else '')
+        if not self.base:
+            print(f'warning: {self.root} has no origin remote and config.github.base is unset; '
+                  'boxes are not linked to GitHub', file=sys.stderr)
+        self.branch = gh.get('branch') or git_probe(self.root, 'rev-parse', '--abbrev-ref', 'HEAD')
+        if not self.branch:
+            self.branch = 'main'
+            if self.base:
+                print('warning: no current branch (repo has no commits?); links use "main"', file=sys.stderr)
+        self.tracked = set()
+        if self.mode == 'tracked' and in_repo:
+            self.tracked = set(filter(None, git(self.root, 'ls-files').split('\n')))
+        elif self.mode == 'tracked' and self.base:
+            print(f'warning: {self.root} is not a git repo, so tracked link mode links nothing; '
+                  'set config.github.root or link_mode "trust"', file=sys.stderr)
         self.file_index = self._index(gh.get('label_link_dirs', []))
         assert isinstance(self.tracked, set)
 
     def _remote_base(self):
         """https URL for origin, from either the ssh or https remote form."""
-        url = git(self.root, 'remote', 'get-url', 'origin')
+        url = git_probe(self.root, 'remote', 'get-url', 'origin')
         if not url:
             return ''
         m = re.match(r'(?:git@([^:]+):|https?://(?:[^@]+@)?([^/]+)/)(.+?)(?:\.git)?$', url)
-        return f'https://{m.group(1) or m.group(2)}/{m.group(3)}' if m else ''
+        if not m:
+            print(f'warning: origin URL {url!r} not understood; set config.github.base', file=sys.stderr)
+            return ''
+        return f'https://{m.group(1) or m.group(2)}/{m.group(3)}'
 
     def _index(self, dirs):
         """filename -> repo path, for auto-linking edge labels that name a data
@@ -375,18 +412,6 @@ class Diagram:
         return len(fg), len(self.edges), len(xml)
 
 
-def render(drawio_path, scale):
-    """Write the SVG (and PNG when a rasteriser exists) next to the .drawio."""
-    import drawio_to_png as r
-    base = os.path.splitext(drawio_path)[0]
-    verts, edges = r.collect(r.load_model(drawio_path))
-    open(base + '.svg', 'w', encoding='utf-8').write(r.render_svg(verts, edges))
-    print(f'{base}.svg: {len(verts)} nodes, {len(edges)} edges')
-    tool = r.svg_to_png(base + '.svg', base + '.png', scale)
-    print(f'{base}.png: rendered via {tool}' if tool else
-          'PNG skipped: no rasteriser (pip install cairosvg, or install librsvg/inkscape/imagemagick)')
-
-
 def main():
     ap = argparse.ArgumentParser(description='Build a .drawio codebase diagram from a graph JSON.')
     ap.add_argument('graph', help='graph JSON file')
@@ -405,7 +430,8 @@ def main():
     n, e, size = d.build(out)
     print(f'wrote {out}: nodes={n} edges={e} bytes={size}')
     if a.render:
-        render(out, a.scale)
+        from drawio_to_png import render
+        render(out, scale=a.scale)
 
 
 if __name__ == '__main__':

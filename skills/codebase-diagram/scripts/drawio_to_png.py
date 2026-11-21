@@ -200,16 +200,31 @@ def arrowhead(x1, y1, x2, y2, color):
             f'{p2[0]:.1f},{p2[1]:.1f}" fill="{color}"/>')
 
 
-def edge_svg(e, verts):
+EDGE_FONT, EDGE_LINE = 9, 11   # edge label font size and line step
+
+
+def edge_points(e, verts):
+    """The drawn path of an edge, from source border through its waypoints to target border;
+    None when an end is missing."""
     src, dst = verts.get(e['src']), verts.get(e['dst'])
     if not src or not dst:
+        return None
+    first = e['pts'][0] if e['pts'] else center(dst)
+    last = e['pts'][-1] if e['pts'] else center(src)
+    return [border_point(src, *first)] + e['pts'] + [border_point(dst, *last)]
+
+
+def label_spots(e, pts):
+    """(x, y, line) for each line of an edge label: centred on the middle segment of the path."""
+    mx = (pts[len(pts)//2-1][0] + pts[len(pts)//2][0]) / 2
+    my = (pts[len(pts)//2-1][1] + pts[len(pts)//2][1]) / 2
+    return [(mx, my + i * EDGE_LINE, ln) for i, ln in enumerate(label_lines(e['label']))] if e['label'] else []
+
+
+def edge_svg(e, verts):
+    pts = edge_points(e, verts)
+    if not pts:
         return ''
-    scx, scy = center(src); dcx, dcy = center(dst)
-    first = e['pts'][0] if e['pts'] else (dcx, dcy)
-    last = e['pts'][-1] if e['pts'] else (scx, scy)
-    p0 = border_point(src, *first)
-    pN = border_point(dst, *last)
-    pts = [p0] + e['pts'] + [pN]
     st = e['style']
     color = st.get('strokeColor', '#9aa6b3')
     sw = st.get('strokeWidth', '1.4')
@@ -221,20 +236,28 @@ def edge_svg(e, verts):
     out = [f'<path d="{d}" fill="none" stroke="{color}" stroke-width="{sw}"{dash}/>']
     ax, ay = pts[-2]; bx, by = pts[-1]
     out.append(arrowhead(ax, ay, bx, by, color))
-    if e['label']:
-        mx = (pts[len(pts)//2-1][0] + pts[len(pts)//2][0]) / 2
-        my = (pts[len(pts)//2-1][1] + pts[len(pts)//2][1]) / 2
-        for ln in label_lines(e['label']):
-            out.append(f'<text x="{mx:.1f}" y="{my:.1f}" font-size="9" fill="#5b6675" '
-                       f'text-anchor="middle" paint-order="stroke" stroke="#ffffff" '
-                       f'stroke-width="3" stroke-linejoin="round">{esc(ln)}</text>')
-            my += 11
+    for x, y, ln in label_spots(e, pts):
+        out.append(f'<text x="{x:.1f}" y="{y:.1f}" font-size="{EDGE_FONT}" fill="#5b6675" '
+                   f'text-anchor="middle" paint-order="stroke" stroke="#ffffff" '
+                   f'stroke-width="3" stroke-linejoin="round">{esc(ln)}</text>')
     return '\n'.join(out)
 
 
+def edge_extent(edges, verts):
+    """Points the page must hold for the edges: every path point, and each label line's corners
+    (width estimated at 0.6 em per character), so nothing Graphviz routes outside the boxes is cut."""
+    out = []
+    for e in edges:
+        pts = edge_points(e, verts) or []
+        out += pts
+        for x, y, ln in label_spots(e, pts):
+            half = len(ln) * EDGE_FONT * 0.3
+            out += [(x - half, y - EDGE_FONT), (x + half, y + 3)]
+    return out
+
+
 def render_svg(verts, edges, pad=30):
-    # Bounds take in edge waypoints too: Graphviz may route an edge outside every box.
-    pts = [p for e in edges for p in e['pts']]
+    pts = edge_extent(edges, verts)
     xs = [v['x'] for v in verts.values()] + [v['x'] + v['w'] for v in verts.values()] + [p[0] for p in pts]
     ys = [v['y'] for v in verts.values()] + [v['y'] + v['h'] for v in verts.values()] + [p[1] for p in pts]
     minx, miny, maxx, maxy = min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad
@@ -280,22 +303,43 @@ def render_svg(verts, edges, pad=30):
 
 # ---------- rasterise ---------------------------------------------------------
 def svg_to_png(svg_path, png_path, scale):
+    """Rasterise with the first tool that works; its name, or None when none is installed.
+    A tool that is installed but fails is reported, then the next one is tried."""
     try:
         import cairosvg
-        cairosvg.svg2png(url=svg_path, write_to=png_path, scale=scale)
-        return 'cairosvg'
-    except Exception:
-        pass
+    except ImportError:
+        cairosvg = None
+    if cairosvg:
+        try:
+            cairosvg.svg2png(url=svg_path, write_to=png_path, scale=scale)
+            return 'cairosvg'
+        except Exception as e:
+            print(f'warning: cairosvg failed on {svg_path}: {e}', file=sys.stderr)
     for tool, cmd in (('rsvg-convert', ['rsvg-convert', '-z', str(scale), '-o', png_path, svg_path]),
                       ('inkscape', ['inkscape', svg_path, '--export-type=png', f'--export-filename={png_path}']),
                       ('convert', ['convert', '-density', str(int(96 * scale)), svg_path, png_path])):
-        if shutil.which(tool):
-            try:
-                subprocess.run(cmd, check=True, capture_output=True)
-                return tool
-            except Exception:
-                continue
+        if not shutil.which(tool):
+            continue
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        if r.returncode == 0:
+            return tool
+        print(f'warning: {tool} failed on {svg_path}: {r.stderr.strip()[:300]}', file=sys.stderr)
     return None
+
+
+def render(drawio_path, svg_path=None, png_path=None, scale=2.0):
+    """Write the SVG, and the PNG when a rasteriser works, next to the .drawio by default."""
+    base = os.path.splitext(drawio_path)[0]
+    svg_path, png_path = svg_path or base + '.svg', png_path or base + '.png'
+    verts, edges = collect(load_model(drawio_path))
+    open(svg_path, 'w', encoding='utf-8').write(render_svg(verts, edges))
+    print(f'{svg_path}: {len(verts)} nodes, {len(edges)} edges')
+    tool = svg_to_png(svg_path, png_path, scale)
+    if tool:
+        print(f'{png_path}: rendered via {tool}')
+    else:
+        print(f'warning: PNG skipped, no working rasteriser (pip install cairosvg, or install '
+              f'librsvg / inkscape / imagemagick); {svg_path} can be opened in a browser', file=sys.stderr)
 
 
 def main():
@@ -305,23 +349,7 @@ def main():
     ap.add_argument('--svg', help='SVG output path (default: <input>.svg)')
     ap.add_argument('--scale', type=float, default=2.0, help='PNG scale factor (default 2)')
     a = ap.parse_args()
-    base = os.path.splitext(a.input)[0]
-    svg_path = a.svg or base + '.svg'
-    png_path = a.output or base + '.png'
-
-    gm = load_model(a.input)
-    verts, edges = collect(gm)
-    open(svg_path, 'w', encoding='utf-8').write(render_svg(verts, edges))
-    print(f'{svg_path}: {len(verts)} nodes, {len(edges)} edges')
-
-    tool = svg_to_png(svg_path, png_path, a.scale)
-    if tool:
-        print(f'{png_path}: rendered via {tool}')
-    else:
-        print('PNG skipped: no rasteriser found. Options:\n'
-              '  pip install cairosvg      (then re-run)\n'
-              '  or install librsvg / inkscape / imagemagick\n'
-              f'  or just open {svg_path} in a browser and export.')
+    render(a.input, a.svg, a.output, a.scale)
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 ---
 name: codebase-diagram
 description: Generate an editable draw.io architecture or data-flow diagram of a codebase, laid out with Graphviz and rendered to SVG/PNG. Use when asked to diagram, map, or visualize how a repo fits together, what calls what, or where the data goes.
-allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/check_deps.py *) Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/build_diagram.py *)
+allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/check_deps.py *) Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/build_diagram.py *) Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/check_edges.py *)
 ---
 
 You survey the repo and write one graph JSON file. The bundled scripts do the
@@ -149,6 +149,7 @@ python3 ${CLAUDE_SKILL_DIR}/scripts/delta_viewer.py docs/diagram/<a>.json [docs/
 - **List (left):** the last `-n` first parent commits of `--ref`, and above them
   each `--branch`, `--pr` or open draft PR, diffed against its PR's base branch
   (with no PR, against `--against`, default `origin/staging`; the card says so).
+  A merged `--pr` is shown as its merge or squash commit instead.
   A merge or branch lists the commits inside it.
 - **PR view (header toggle):** one card per pull request, titled with the PR
   title. A PR's own commits are folded into its card, so its diff, file notes

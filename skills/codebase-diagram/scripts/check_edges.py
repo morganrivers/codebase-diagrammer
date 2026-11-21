@@ -56,7 +56,9 @@ class Source:
             return git(self.root, 'show', f'{self.ref}:{path}')
         try:
             return open(os.path.join(self.root, path), encoding='utf-8', errors='replace').read()
-        except OSError:
+        except OSError as e:
+            print(f'warning: {path} is tracked but not readable ({e.strerror}); its imports are not checked',
+                  file=sys.stderr)
             return ''
 
 
@@ -121,9 +123,11 @@ class ImportGraph:
         return next((self._ts_file(tgt + spec[len(pre):]) for pre, tgt in self.aliases
                      if spec.startswith(pre)), None)
 
-    def _py_module(self, dotted):
+    def _py_module(self, dotted, here=''):
+        """The repo file a dotted module names, from the repo root, `src/`, or the importing
+        file's own folder (a script run directly has its folder on sys.path)."""
         rel = dotted.replace('.', '/')
-        for prefix in ('', 'src/'):
+        for prefix in ('', 'src/') + ((here + '/',) if here else ()):
             for cand in (f'{prefix}{rel}.py', f'{prefix}{rel}/__init__.py'):
                 if cand in self.src.files:
                     return cand
@@ -146,7 +150,7 @@ class ImportGraph:
                 # `from pkg import mod` imports a module when one exists by that name.
                 mods = [base] + [f'{base}.{n}' for n in names if n != '*']
             for m in mods:
-                target = self._py_module(m)
+                target = self._py_module(m, '' if frm.startswith('.') else posixpath.dirname(path))
                 if target and target != path:
                     out.add(target)
                     self.names[(path, target)] = plain or ', '.join(names)

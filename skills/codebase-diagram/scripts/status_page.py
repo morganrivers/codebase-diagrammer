@@ -80,7 +80,7 @@ def render_workstream(ws):
         parts.append(f'<div class="about">{e(ws["about"])}</div>')
     parts.append('<ul class="items">')
     for item in items:
-        state = item.get('state', 'planned')
+        state = item.get('state')
         if state not in STATES:
             sys.exit(f'unknown state {state!r} in item {item.get("text")!r}; use one of {sorted(STATES)}')
         mark, label = STATES[state]

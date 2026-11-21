@@ -160,6 +160,7 @@
   },
   {
    "id": "SX_train_loader",
+   "proxy_of": "train",
    "grp": "I",
    "type": "proxy",
    "robot": false,
@@ -170,6 +171,7 @@
   },
   {
    "id": "SX_train_rag",
+   "proxy_of": "train",
    "grp": "R",
    "type": "proxy",
    "robot": false,
@@ -180,6 +182,7 @@
   },
   {
    "id": "SX_train_pperf",
+   "proxy_of": "train",
    "grp": "U",
    "type": "proxy",
    "robot": false,
