@@ -1,7 +1,6 @@
 # codebase-diagrammer
 
-**This whole codebase is a one-shot claude-opus-5, but I find it useful. README below is all Claude as well**
-**Update: Opus 5.5 has been iterating with me on it. PR diffs, per-commit. Recommend getting your agent to summarize the full-file diffs for the PRs or commits you are using. I'm finding this useful to read code agents write instead of using the filesystem lately.**
+**This whole codebase is claude-opus-5, then later opus5.5 generated. I find it useful. Helps you view your codebase using graphviz auto-layout. PR diffs, per-commit, are also a feature but require some token burn to get every change summarized, you can ask your agent to do that. Even after a few months I'm finding this useful to read the code agents write, instead of using the filesystem directly or git diffs to read the code changes.**
 **The rest is just Claude Opus5.5 talking about the repo.**
 A Claude Code skill that turns a repository into an editable draw.io diagram:
 Claude reads the code and writes a graph JSON, Graphviz lays it out, and the
